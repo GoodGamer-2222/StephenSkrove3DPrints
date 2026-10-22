@@ -3,5 +3,8 @@ const PHOTOS = {
   "garbage-truck": {
     "defaultColor": "Gray",
     "images": []
+  },
+  "bobcat": {
+    "defaultColor": "Gray"
   }
 };
