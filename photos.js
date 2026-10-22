@@ -32,7 +32,9 @@ const PHOTOS = {
   "thumb-drum": {
     "defaultColor": "Gray",
     "images": [
-      "images/thumb-drum-1.jpg"
+      "images/thumb-drum-1.jpg",
+      "images/thumb-drum-2.jpg",
+      "images/thumb-drum-3.jpg"
     ]
   }
 };
