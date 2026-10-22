@@ -20,5 +20,8 @@ const PHOTOS = {
       "images/fidget-2.jpg",
       "images/fidget-3.jpg"
     ]
+  },
+  "cat": {
+    "defaultColor": "Gray"
   }
 };
