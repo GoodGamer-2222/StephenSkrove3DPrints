@@ -2,8 +2,6 @@
 const PHOTOS = {
   "garbage-truck": {
     "defaultColor": "Gray",
-    "images": [
-      "images/garbage-truck-1.jpg"
-    ]
+    "images": []
   }
 };
