@@ -10,14 +10,16 @@ button.s{width:auto;background:#fff;color:#17201d;border:1px solid #d8dedb;paddi
 .row{display:flex;gap:.8rem;align-items:center;padding:.5rem 0;border-bottom:1px solid #d8dedb}
 .row img{width:64px;height:64px;object-fit:cover;border-radius:6px;background:#e3ebe8}.row span{flex:1}
 #log{white-space:pre-wrap;margin-top:1rem;font-size:.95rem}.note{background:#e6f0ed;padding:.8rem;border-radius:8px}
+.row select{width:auto;max-width:45%}.row .s{flex:none}
 </style></head><body>
 <h1>Photo uploader</h1>
 <p class="note">This page isn't linked from your shop. Only someone with your GitHub token can change anything, so never share the token.</p>
 <div id="tokbox"><label for="tok">GitHub token</label><input id="tok" type="password" autocomplete="off">
 <button id="savetok" type="button">Save token on this device</button></div>
 <div id="app" hidden>
-<label for="prod">Product</label><select id="prod"></select>
-<label for="files">Photos (the first one you add becomes the main photo if the product has none)</label><input id="files" type="file" accept="image/*" multiple>
+<label for="prod">Product (each photo below can be changed)</label><select id="prod"></select>
+<label for="files">Photos (choose as many as you like; the first one for a product becomes its main photo if it has none)</label><input id="files" type="file" accept="image/*" multiple>
+<div id="queue"></div>
 <button id="up" type="button">Upload</button>
 <label for="col">Color shown in the main photo (optional)</label><select id="col"></select>
 <h2>Photos for this product</h2><div id="list"></div>
@@ -28,7 +30,7 @@ button.s{width:auto;background:#fff;color:#17201d;border:1px solid #d8dedb;paddi
 <script>
 // ---- settings: change only if your repository details change ----
 const OWNER = "goodgamer-2222", REPO = "StephenSkrove3DPrints";
-let branch = "main", sha = null, photos = {};
+let branch = "main", sha = null, photos = {}, queue = [];
 const $ = s => document.querySelector(s);
 const say = t => { $("#log").textContent = t; };
 const tok = () => { try { return localStorage.getItem("ghtok") || ""; } catch (e) { return ""; } };
@@ -37,7 +39,7 @@ const api = (path, opt = {}) => fetch(`https://api.github.com/repos/${OWNER}/${R
 const b64 = s => btoa(unescape(encodeURIComponent(s)));
 const parsePhotos = t => { try { return JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1) || "{}"); } catch (e) { return {}; } };
 const serialize = o => `// Photo lists, managed by admin.html. Please don't edit by hand.\nconst PHOTOS = ${JSON.stringify(o, null, 2)};\n`;
-const nextName = id => { const n = ((photos[id] || {}).images || []).map(p => +(p.match(new RegExp(id + "-(\\d+)\\.jpg$")) || [0, 0])[1]); return `${id}-${Math.max(0, ...n) + 1}.jpg`; };
+const nextNum = id => Math.max(0, ...((photos[id] || {}).images || []).map(p => +(p.match(new RegExp(id + "-(\\d+)\\.jpg$")) || [0, 0])[1])) + 1;
 const cur = () => PRODUCTS.find(p => p.id === $("#prod").value);
 
 async function shrink(file) {
@@ -64,10 +66,23 @@ function show() {
   $("#col").innerHTML = `<option value="">(none)</option>` + p.colors.map(c => `<option ${c === x.defaultColor ? "selected" : ""}>${c}</option>`).join("");
   $("#list").innerHTML = imgs.length ? imgs.map((s, i) => `<div class="row"><img src="${s}" alt=""><span>${s.split("/").pop()}${i ? "" : " (main)"}</span>${i ? `<button class="s" data-a="main" data-i="${i}">Make main</button>` : ""}<button class="s" data-a="del" data-i="${i}">Remove</button></div>`).join("") : "<p>No photos yet.</p>";
 }
+async function putImage(id, content) {
+  let n = nextNum(id);
+  for (let t = 0; t < 8; t++, n++) {
+    const name = `${id}-${n}.jpg`;
+    try { await api("contents/images/" + name, { method: "PUT", body: JSON.stringify({ message: "Add photo " + name, content, branch }) }); return "images/" + name; }
+    catch (e) { if (!/^422/.test(e.message)) throw e; }
+  }
+  throw new Error("Couldn't find a free file name");
+}
+function drawQueue() {
+  const opts = id => PRODUCTS.map(p => `<option value="${p.id}" ${p.id === id ? "selected" : ""}>${p.name}</option>`).join("");
+  $("#queue").innerHTML = queue.map((r, i) => `<div class="row"><img src="${r.url}" alt=""><span>${r.file.name}</span><select data-i="${i}" aria-label="Product for ${r.file.name}">${opts(r.id)}</select><button class="s" type="button" data-i="${i}" aria-label="Remove from this upload">×</button></div>`).join("");
+}
 async function run(label, fn) {
   const b = $("#up"); b.disabled = true;
   try { say(label + "..."); await fn(); say("Done. The shop updates in a minute or two (refresh it then). New thumbnails here may need that long too."); }
-  catch (e) { say("Something went wrong: " + e.message); }
+  catch (e) { say("Something went wrong: " + e.message + "\n(Reloaded your saved list from GitHub so this page matches the shop.)"); try { await load(); } catch (_) {} }
   b.disabled = false; show();
 }
 async function start() {
@@ -77,7 +92,10 @@ async function start() {
 }
 $("#savetok").onclick = () => { try { localStorage.setItem("ghtok", $("#tok").value.trim()); } catch (e) {} $("#tok").value = ""; start(); };
 $("#forget").onclick = () => { try { localStorage.removeItem("ghtok"); } catch (e) {} location.reload(); };
-$("#prod").onchange = show;
+$("#prod").onchange = () => { show(); queue.forEach(r => { if (!r.manual) r.id = $("#prod").value; }); drawQueue(); };
+$("#files").onchange = () => { queue = [...$("#files").files].map(f => ({ file: f, id: $("#prod").value, manual: false, url: URL.createObjectURL(f) })); drawQueue(); };
+$("#queue").onchange = e => { const i = +e.target.dataset.i; queue[i].id = e.target.value; queue[i].manual = true; };
+$("#queue").onclick = e => { const b = e.target.closest("button"); if (!b) return; queue.splice(+b.dataset.i, 1); drawQueue(); };
 $("#col").onchange = () => run("Saving color", async () => { const id = cur().id; photos[id] = { ...(photos[id] || {}), defaultColor: $("#col").value }; await save("Set default color for " + id); });
 $("#list").onclick = e => {
   const b = e.target.closest("button"); if (!b) return;
@@ -86,16 +104,18 @@ $("#list").onclick = e => {
   run("Saving", () => save("Update photos for " + id));
 };
 $("#up").onclick = () => {
-  const files = [...$("#files").files], id = cur().id;
-  if (!files.length) return say("Choose at least one photo first.");
-  run(`Uploading ${files.length} photo(s)`, async () => {
-    photos[id] = photos[id] || {}; photos[id].images = photos[id].images || [];
-    for (const f of files) {
-      const name = nextName(id);
-      await api("contents/images/" + name, { method: "PUT", body: JSON.stringify({ message: "Add photo " + name, content: await shrink(f), branch }) });
-      photos[id].images.push("images/" + name);
+  if (!queue.length) return say("Choose at least one photo first.");
+  return run(`Uploading ${queue.length} photo(s)`, async () => {
+    const done = new Set();
+    try {
+      for (const r of queue) {
+        photos[r.id] = photos[r.id] || {}; const a = photos[r.id].images = photos[r.id].images || [];
+        a.push(await putImage(r.id, await shrink(r.file))); done.add(r);
+      }
+    } finally {
+      if (done.size) await save("Add photos");
+      queue = queue.filter(r => !done.has(r)); if (!queue.length) $("#files").value = ""; drawQueue();
     }
-    await save("Add photos for " + id); $("#files").value = "";
   });
 };
 if (tok()) start();
