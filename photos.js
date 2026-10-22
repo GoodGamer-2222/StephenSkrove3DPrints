@@ -24,7 +24,9 @@ const PHOTOS = {
   "cat": {
     "defaultColor": "Gray",
     "images": [
-      "images/cat-1.jpg"
+      "images/cat-1.jpg",
+      "images/cat-2.jpg",
+      "images/cat-3.jpg"
     ]
   }
 };
