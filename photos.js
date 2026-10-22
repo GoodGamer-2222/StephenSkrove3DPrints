@@ -22,6 +22,9 @@ const PHOTOS = {
     ]
   },
   "cat": {
-    "defaultColor": "Gray"
+    "defaultColor": "Gray",
+    "images": [
+      "images/cat-1.jpg"
+    ]
   }
 };
