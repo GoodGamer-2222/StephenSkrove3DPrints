@@ -1,3 +1,4 @@
+if (typeof PHOTOS !== "undefined") PRODUCTS.forEach(p => { const x = PHOTOS[p.id]; if (x) { if (x.images && x.images.length) p.images = x.images; if (x.defaultColor) p.defaultColor = x.defaultColor; } });
 const $ = s => document.querySelector(s);
 const money = n => "$" + n.toFixed(2);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -67,7 +68,7 @@ const views = {
         <p class="price" style="font-size:1.4rem">${money(p.price)}</p>
         <p>${esc(p.desc)}</p>${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}
         ${p.note ? `<p class="note">${esc(p.note)}</p>` : ""}${p.mystery ? `<p class="note">Mystery box: the items and colors are a surprise, so you can't choose them.</p>` : `<b>Color</b>
-        <div class="sw">${swatches(p)}</div><small style="display:block;margin:-.5rem 0 1.2rem;color:var(--mute)">Colors vary slightly from spool to spool.</small><p id="chint" class="note" hidden>Colored means this one is hand-colored to look realistic.</p>`}
+        <div class="sw">${swatches(p)}</div><small style="display:block;margin:-.5rem 0 1.2rem;color:var(--mute)">Colors vary slightly from spool to spool.</small><div id="chint" class="note" hidden>Colored means this one is hand-colored to look realistic.<label for="want" style="display:block;font-weight:600;margin:.6rem 0 .25rem">Want a main color? (optional)</label><input id="want" name="want" maxlength="40" placeholder="e.g. pink" autocomplete="off"><small style="display:block;margin-top:.3rem">We'll confirm if we can match it.</small></div>`}
         <b><label for="q">Quantity</label></b><br>
         <input id="q" type="number" name="q" min="1" max="20" value="1"><br><br>
         <button class="btn" ${p.mystery || avail(p).length ? "" : "disabled"}>Add to request list</button>
@@ -78,7 +79,7 @@ const views = {
   order: () => {
     if (!cart.length) return `<h2>Your request list</h2><p>It's empty. <a href="#/shop">Browse the shop</a></p>`;
     return `<h2>Your request list</h2>
-    ${cart.map((c, i) => `<div class="row"><div class="n"><b>${esc(c.name)}</b><small>${esc(c.color)} · ${money(c.price)} each</small></div>
+    ${cart.map((c, i) => `<div class="row"><div class="n"><b>${esc(c.name)}</b><small>${esc(c.color)}${c.want ? ` (main color: ${esc(c.want)})` : ""} · ${money(c.price)} each</small></div>
       <div class="q"><button aria-label="Fewer" onclick="qty(${i},-1)">−</button> ${c.q} <button aria-label="More" onclick="qty(${i},1)">+</button></div>
       <b>${money(c.price * c.q)}</b><button class="link" onclick="rm(${i})">Remove</button></div>`).join("")}
     <div class="total">Total: ${money(total())}</div>
@@ -125,8 +126,9 @@ function add(e, id) {
   e.preventDefault();
   const p = PRODUCTS.find(x => x.id === id), f = e.target;
   const color = f.color ? f.color.value : "Surprise", q = Math.max(1, Math.min(20, +f.q.value || 1));
-  const ex = cart.find(c => c.id === id && c.color === color);
-  ex ? ex.q += q : cart.push({ id, name: p.name, color, price: p.price, q });
+  const want = color === "Colored" && f.want ? f.want.value.trim().slice(0, 40) : "";
+  const ex = cart.find(c => c.id === id && c.color === color && (c.want || "").toLowerCase() === want.toLowerCase());
+  ex ? ex.q += q : cart.push({ id, name: p.name, color, want, price: p.price, q });
   save(); nav(); $("#added").innerHTML = `Added! <a href="#/order">View request list</a>`;
 }
 const showFul = () => {
@@ -144,7 +146,7 @@ const nav = () => $("#cartlink").innerHTML = `Request list <span class="badge${c
 async function send(e) {
   e.preventDefault();
   const f = e.target, b = f.querySelector(".btn"), d = Object.fromEntries(new FormData(f));
-  d.items = cart.map(c => `${c.q} x ${c.name} (${c.color}) - ${money(c.price * c.q)}`).join("\n");
+  d.items = cart.map(c => `${c.q} x ${c.name} (${c.color}${c.want ? ", main color: " + c.want : ""}) - ${money(c.price * c.q)}`).join("\n");
   d.total = money(total());
   d._subject = "New order request from " + d.name;
   d._template = "table"; d._captcha = "false";

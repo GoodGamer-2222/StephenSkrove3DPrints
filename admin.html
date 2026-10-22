@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Photo uploader</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;max-width:640px;margin:0 auto;padding:1rem;background:#f4f6f5;color:#17201d}
+h1{font-size:1.5rem}label{display:block;font-weight:600;margin:1rem 0 .25rem}
+input,select,button{font:inherit;padding:.6rem;border:1px solid #d8dedb;border-radius:6px;width:100%;background:#fff}
+button{background:#0e6f62;color:#fff;border:0;cursor:pointer;font-weight:600;margin-top:.8rem}button:disabled{opacity:.6}
+button.s{width:auto;background:#fff;color:#17201d;border:1px solid #d8dedb;padding:.3rem .6rem;margin:0 .3rem 0 0}
+.row{display:flex;gap:.8rem;align-items:center;padding:.5rem 0;border-bottom:1px solid #d8dedb}
+.row img{width:64px;height:64px;object-fit:cover;border-radius:6px;background:#e3ebe8}.row span{flex:1}
+#log{white-space:pre-wrap;margin-top:1rem;font-size:.95rem}.note{background:#e6f0ed;padding:.8rem;border-radius:8px}
+</style></head><body>
+<h1>Photo uploader</h1>
+<p class="note">This page isn't linked from your shop. Only someone with your GitHub token can change anything, so never share the token.</p>
+<div id="tokbox"><label for="tok">GitHub token</label><input id="tok" type="password" autocomplete="off">
+<button id="savetok" type="button">Save token on this device</button></div>
+<div id="app" hidden>
+<label for="prod">Product</label><select id="prod"></select>
+<label for="files">Photos (the first one you add becomes the main photo if the product has none)</label><input id="files" type="file" accept="image/*" multiple>
+<button id="up" type="button">Upload</button>
+<label for="col">Color shown in the main photo (optional)</label><select id="col"></select>
+<h2>Photos for this product</h2><div id="list"></div>
+<p><button class="s" id="forget" type="button">Forget token on this device</button></p>
+</div>
+<div id="log" role="status"></div>
+<script src="products.js"></script>
+<script>
+// ---- settings: change only if your repository details change ----
+const OWNER = "goodgamer-2222", REPO = "StephenSkrove3DPrints";
+let branch = "main", sha = null, photos = {};
+const $ = s => document.querySelector(s);
+const say = t => { $("#log").textContent = t; };
+const tok = () => { try { return localStorage.getItem("ghtok") || ""; } catch (e) { return ""; } };
+const api = (path, opt = {}) => fetch(`https://api.github.com/repos/${OWNER}/${REPO}${path ? "/" + path : ""}`, { ...opt, headers: { Authorization: "Bearer " + tok(), Accept: "application/vnd.github+json", "Content-Type": "application/json" } })
+  .then(async r => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(r.status + ": " + (j.message || "request failed")); return j; });
+const b64 = s => btoa(unescape(encodeURIComponent(s)));
+const parsePhotos = t => { try { return JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1) || "{}"); } catch (e) { return {}; } };
+const serialize = o => `// Photo lists, managed by admin.html. Please don't edit by hand.\nconst PHOTOS = ${JSON.stringify(o, null, 2)};\n`;
+const nextName = id => { const n = ((photos[id] || {}).images || []).map(p => +(p.match(new RegExp(id + "-(\\d+)\\.jpg$")) || [0, 0])[1]); return `${id}-${Math.max(0, ...n) + 1}.jpg`; };
+const cur = () => PRODUCTS.find(p => p.id === $("#prod").value);
+
+async function shrink(file) {
+  const bm = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const k = Math.min(1, 1200 / Math.max(bm.width, bm.height)), c = document.createElement("canvas");
+  c.width = Math.round(bm.width * k); c.height = Math.round(bm.height * k);
+  c.getContext("2d").drawImage(bm, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", .82).split(",")[1];
+}
+async function load() {
+  branch = (await api("")).default_branch;
+  try {
+    const f = await api(`contents/photos.js?ref=${branch}`);
+    sha = f.sha; photos = parsePhotos(decodeURIComponent(escape(atob(f.content.replace(/\n/g, "")))));
+  } catch (e) { if (!/^404/.test(e.message)) throw e; sha = null; photos = {}; }
+}
+async function save(msg) {
+  const body = { message: msg, content: b64(serialize(photos)), branch };
+  if (sha) body.sha = sha;
+  sha = (await api("contents/photos.js", { method: "PUT", body: JSON.stringify(body) })).content.sha;
+}
+function show() {
+  const p = cur(), x = photos[p.id] || {}, imgs = x.images || [];
+  $("#col").innerHTML = `<option value="">(none)</option>` + p.colors.map(c => `<option ${c === x.defaultColor ? "selected" : ""}>${c}</option>`).join("");
+  $("#list").innerHTML = imgs.length ? imgs.map((s, i) => `<div class="row"><img src="${s}" alt=""><span>${s.split("/").pop()}${i ? "" : " (main)"}</span>${i ? `<button class="s" data-a="main" data-i="${i}">Make main</button>` : ""}<button class="s" data-a="del" data-i="${i}">Remove</button></div>`).join("") : "<p>No photos yet.</p>";
+}
+async function run(label, fn) {
+  const b = $("#up"); b.disabled = true;
+  try { say(label + "..."); await fn(); say("Done. The shop updates in a minute or two (refresh it then). New thumbnails here may need that long too."); }
+  catch (e) { say("Something went wrong: " + e.message); }
+  b.disabled = false; show();
+}
+async function start() {
+  $("#tokbox").hidden = true; $("#app").hidden = false; say("Connecting to GitHub...");
+  try { await load(); $("#prod").innerHTML = PRODUCTS.map(p => `<option value="${p.id}">${p.name}</option>`).join(""); show(); say("Ready. Choose a product and add photos."); }
+  catch (e) { say("Couldn't connect: " + e.message + "\nCheck the token and that it has access to this repository."); $("#tokbox").hidden = false; $("#app").hidden = true; }
+}
+$("#savetok").onclick = () => { try { localStorage.setItem("ghtok", $("#tok").value.trim()); } catch (e) {} $("#tok").value = ""; start(); };
+$("#forget").onclick = () => { try { localStorage.removeItem("ghtok"); } catch (e) {} location.reload(); };
+$("#prod").onchange = show;
+$("#col").onchange = () => run("Saving color", async () => { const id = cur().id; photos[id] = { ...(photos[id] || {}), defaultColor: $("#col").value }; await save("Set default color for " + id); });
+$("#list").onclick = e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const id = cur().id, a = photos[id].images, i = +b.dataset.i;
+  if (b.dataset.a === "main") a.unshift(a.splice(i, 1)[0]); else a.splice(i, 1);
+  run("Saving", () => save("Update photos for " + id));
+};
+$("#up").onclick = () => {
+  const files = [...$("#files").files], id = cur().id;
+  if (!files.length) return say("Choose at least one photo first.");
+  run(`Uploading ${files.length} photo(s)`, async () => {
+    photos[id] = photos[id] || {}; photos[id].images = photos[id].images || [];
+    for (const f of files) {
+      const name = nextName(id);
+      await api("contents/images/" + name, { method: "PUT", body: JSON.stringify({ message: "Add photo " + name, content: await shrink(f), branch }) });
+      photos[id].images.push("images/" + name);
+    }
+    await save("Add photos for " + id); $("#files").value = "";
+  });
+};
+if (tok()) start();
+</script></body></html>
