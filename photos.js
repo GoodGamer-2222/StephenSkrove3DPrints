@@ -14,6 +14,11 @@ const PHOTOS = {
     ]
   },
   "fidget": {
-    "defaultColor": "Gray"
+    "defaultColor": "Gray",
+    "images": [
+      "images/fidget-1.jpg",
+      "images/fidget-2.jpg",
+      "images/fidget-3.jpg"
+    ]
   }
 };
