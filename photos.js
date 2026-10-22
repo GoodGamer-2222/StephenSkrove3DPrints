@@ -28,5 +28,8 @@ const PHOTOS = {
       "images/cat-2.jpg",
       "images/cat-3.jpg"
     ]
+  },
+  "thumb-drum": {
+    "defaultColor": "Gray"
   }
 };
