@@ -12,5 +12,8 @@ const PHOTOS = {
       "images/bobcat-3.jpg",
       "images/bobcat-4.jpg"
     ]
+  },
+  "fidget": {
+    "defaultColor": "Gray"
   }
 };
