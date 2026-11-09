@@ -26,12 +26,14 @@ const GLITTER = (c, base) => `radial-gradient(circle at 25% 30%,${c} 0 1.5px,tra
 const COLORS = {
   Green: "#2f8f4e", Gray: "#8a8f94", White: "#f2f2f2", Yellow: "#e8c52a", Red: "#c8362e",
   Blue: "#2f5fb8", Purple: "#7a4bb5",
+  "Silk Gold": "linear-gradient(135deg,#8a6a1c,#f1d27a 40%,#b8902f 60%,#f6e3a1)",
+  "Silk Red": "linear-gradient(135deg,#6e0f12,#e0494d 40%,#9a1b20 60%,#f08488)",
   "Black / Blue Glitter": GLITTER("#6ab0ff", "#1a1a1a"),
   "Black / Gold Glitter": GLITTER("#e8c25a", "#1a1a1a"),
   Colored: "radial-gradient(circle at 25% 30%,#c8362e 0 3px,transparent 3.5px),radial-gradient(circle at 72% 25%,#2f5fb8 0 3px,transparent 3.5px),radial-gradient(circle at 62% 74%,#2f8f4e 0 3px,transparent 3.5px),radial-gradient(circle at 28% 72%,#e8c52a 0 2.5px,transparent 3px),#f2f2f2",
   "Gray/Black and White": "linear-gradient(90deg,#444 50%,#f2f2f2 50%)"
 };
-const ALL = ["Green", "Gray", "White", "Yellow", "Red", "Blue", "Purple", "Black / Blue Glitter", "Black / Gold Glitter", "Colored"];  // every product gets these
+const ALL = ["Green", "Gray", "White", "Yellow", "Red", "Blue", "Purple", "Silk Gold", "Silk Red", "Black / Blue Glitter", "Black / Gold Glitter", "Colored"];  // every product gets these
 const NO_COLORED = ALL.filter(c => c !== "Colored");  // used by products that can't be "Colored"
 
 // To add a product, copy a line. Fields: id, name, price, cat (a key from CATS), colors, desc.
