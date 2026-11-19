@@ -36,5 +36,8 @@ const PHOTOS = {
       "images/thumb-drum-2.jpg",
       "images/thumb-drum-3.jpg"
     ]
+  },
+  "gecko": {
+    "defaultColor": "Green"
   }
 };
