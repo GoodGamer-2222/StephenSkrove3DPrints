@@ -38,6 +38,11 @@ const PHOTOS = {
     ]
   },
   "gecko": {
-    "defaultColor": "Green"
+    "defaultColor": "Green",
+    "images": [
+      "images/gecko-1.jpg",
+      "images/gecko-2.jpg",
+      "images/gecko-3.jpg"
+    ]
   }
 };
