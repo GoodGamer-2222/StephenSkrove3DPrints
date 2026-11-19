@@ -47,10 +47,10 @@ const PHOTOS = {
   },
   "chicken": {
     "images": [
+      "images/chicken-4.jpg",
       "images/chicken-1.jpg",
       "images/chicken-2.jpg",
-      "images/chicken-3.jpg",
-      "images/chicken-4.jpg"
+      "images/chicken-3.jpg"
     ],
     "defaultColor": "Gray"
   }
