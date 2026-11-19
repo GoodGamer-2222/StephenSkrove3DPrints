@@ -44,5 +44,13 @@ const PHOTOS = {
       "images/gecko-2.jpg",
       "images/gecko-3.jpg"
     ]
+  },
+  "chicken": {
+    "images": [
+      "images/chicken-1.jpg",
+      "images/chicken-2.jpg",
+      "images/chicken-3.jpg",
+      "images/chicken-4.jpg"
+    ]
   }
 };
