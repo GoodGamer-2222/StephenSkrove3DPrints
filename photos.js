@@ -51,6 +51,7 @@ const PHOTOS = {
       "images/chicken-2.jpg",
       "images/chicken-3.jpg",
       "images/chicken-4.jpg"
-    ]
+    ],
+    "defaultColor": "Gray"
   }
 };
