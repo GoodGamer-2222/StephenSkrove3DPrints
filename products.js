@@ -41,7 +41,7 @@ const NO_COLORED = ALL.filter(c => c !== "Colored");  // used by products that c
 // images: ["images/x-1.jpg", ...] (first = main photo), defaultColor, soldOut: ["Red"], note: "text".
 const D = { soldOut: [], tags: "", note: "", images: [], defaultColor: "" };
 const PRODUCTS = [
-  { ...D, id: "garbage-truck", icon: "garbage", name: "Garbage Truck", price: 15, cat: "vehicles", featured: true, colors: ALL,
+  { ...D, id: "garbage-truck", icon: "garbage", name: "Garbage Truck", price: 15, cat: "vehicles", colors: ALL,
     desc: "A garbage truck full of moving mechanics. A working lever picks up a trash can and dumps its contents, and the back door works. The rear hopper and bed tilt mechanism haul mini payloads. Its wheels move, and it comes with 2 trash cans that have working lids and wheels. Design by WhopperPrinting on Printables." },
   { ...D, id: "rocket-truck", icon: "rocket", name: "Rocket Launcher Truck", price: 13, cat: "vehicles", colors: ALL,
     desc: "A rugged truck with a moving, rotating rocket pod assembly. The wheels move too, so it rolls along. Great for pretend play or a desk display. Based on the RM-70 Vampire 4D rocket launcher. Design by SHR3D.eu on Printables." },
@@ -59,7 +59,7 @@ const PRODUCTS = [
     desc: "An eight-wheeled off-road semi, designed to look like a Tatra 813, the Czechoslovak heavy off-road truck built from 1967 to 1982. The wheels work, so it rolls along. Design by SHR3D.eu on Printables." },
   { ...D, id: "dump-truck", icon: "dump", name: "Long Dump Truck", price: 12.5, cat: "vehicles", colors: ALL,
     desc: "A 6-wheeled dump truck with a dump bucket that really dumps, plus working wheels. Haul a load and tip it out. Design by SHR3D.eu on Printables." },
-  { ...D, id: "bobcat", note: "Small parts warning: this model has small parts, so it is not suitable for small children.", tags: "construction loader", icon: "bobcat", name: "Bobcat Tractor", price: 8, cat: "vehicles", colors: ALL,
+  { ...D, id: "bobcat", note: "Small parts warning: this model has small parts, so it is not suitable for small children.", tags: "construction loader", icon: "bobcat", name: "Bobcat Tractor", price: 8, cat: "vehicles", featured: true, colors: ALL,
     desc: "A compact 4-wheeled skid-steer utility loader. The front loader arms move by hand and the wheels rotate freely, so it's ready to scoop and push. Design by SHR3D.eu on Printables." },
   { ...D, id: "van", icon: "van", name: "Simple Van", price: 7, cat: "vehicles", colors: ALL,
     desc: "A hard, angular van with stylized, minimalist features and working wheels. Simple and fun to roll around. Design by SHR3D.eu on Printables." },
