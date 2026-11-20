@@ -98,6 +98,10 @@ const SETTINGS = {
     "flower-dragon": {
       "desc": "An articulated dragon whose body sections are shaped like lotus flowers or roses. It bends and wiggles when you move it, so you can pose it or just fidget with it.",
       "credit": "Design by Daann_ii on Printables."
+    },
+    "capybara": {
+      "desc": "An articulated baby capybara with a jointed body that bends and wiggles when you move it. A relaxed little desk buddy, small enough to be a pocket pet.",
+      "credit": "Design by Fulcrum Studio on Printables."
     }
   }
 };
