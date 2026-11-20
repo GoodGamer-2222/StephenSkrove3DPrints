@@ -20,7 +20,9 @@ const SETTINGS = {
       "price": 50
     },
     "chicken": {
-      "featured": false
+      "featured": false,
+      "desc": "A 2D chicken with a swinging, multi-jointed body that flexes as you move it. A fun fidget or desk buddy.",
+      "credit": "Design by Buchtomil on Printables."
     },
     "thumb-drum": {
       "featured": true
