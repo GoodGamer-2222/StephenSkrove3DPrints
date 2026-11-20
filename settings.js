@@ -112,6 +112,10 @@ const SETTINGS = {
     "wolf": {
       "desc": "A modern, geometric tabletop statue with sharp, artistic polygon features. A good desk or shelf decoration. About 50 × 60 × 100 mm.",
       "credit": "Design by Sarathy Srinath on Printables."
+    },
+    "cat": {
+      "desc": "A cartoonish cat with a big head, sitting down. A cute little desk or shelf decoration.",
+      "credit": "Design by CHICKEMM on Printables."
     }
   }
 };
