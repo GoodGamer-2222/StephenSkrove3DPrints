@@ -145,5 +145,47 @@ const SETTINGS = {
       "The White Owl, 119 SE 6th St"
     ],
     "shipPayment": "Apple Pay, Venmo, or Zelle"
-  }
+  },
+  "faq": [
+    [
+      "How does ordering work?",
+      "Pick what you like and add it to your request list, then send the request. We'll email you from stephenskrove@gmail.com to confirm availability and the total, and to set up a meetup."
+    ],
+    [
+      "Do I pay online?",
+      "No. Nothing is charged when you send a request. For meetups, you pay with cash, Venmo, or Zelle when you pick up. For shipped or delivered orders, we'll email you the total with cost and the payment info (Apple Pay, Venmo, or Zelle)."
+    ],
+    [
+      "Where do we meet if I choose local meetup?",
+      "At a public spot in Grants Pass, which you pick on the order form. Local delivery adds a small additional fee."
+    ],
+    [
+      "Do you ship?",
+      "Yes. Choose \"Ship it to me\" on the order form. Shipping adds a small fee, which we calculate and email you before anything is charged. If the shipping is too much, you can cancel your order."
+    ],
+    [
+      "Are the colors exact?",
+      "Colors vary slightly from spool to spool. Tell us if a particular color matters."
+    ],
+    [
+      "What does \"Colored\" mean?",
+      "Colored items are printed in white and then colored by hand to look realistic, so the exact coloring may vary slightly. You can request a main color, like pink, when you choose Colored, and we'll confirm whether we can match it."
+    ],
+    [
+      "How do mystery boxes work?",
+      "Each box holds 4 or 8 items from one category: cars, articulated toys, or desk toys and functional items. The items and colors are a surprise, so you can't choose them."
+    ],
+    [
+      "What are the products made of?",
+      "PLA plastic, printed on a 3D printer."
+    ],
+    [
+      "What if there's a problem with my order?",
+      "Send a photo of the problem to stephenskrove@gmail.com and we'll happily refund or replace it."
+    ],
+    [
+      "Can you make something custom?",
+      "Maybe! Use the Custom prints link at the bottom of any page to tell us what you have in mind. We'll let you know if we can do it and what it would cost."
+    ]
+  ]
 };
