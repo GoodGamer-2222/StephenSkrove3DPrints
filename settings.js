@@ -50,6 +50,10 @@ const SETTINGS = {
     "offroad-semi": {
       "desc": "An eight-wheeled off-road semi, designed to look like a Tatra 813, the Czechoslovak heavy off-road truck built from 1967 to 1982. The wheels work, so it rolls along.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "dump-truck": {
+      "desc": "A 6-wheeled dump truck with a dump bucket that really dumps, plus working wheels. Haul a load and tip it out.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
