@@ -1,5 +1,14 @@
 if (typeof PHOTOS !== "undefined") PRODUCTS.forEach(p => { const x = PHOTOS[p.id]; if (x) { if (x.images && x.images.length) p.images = x.images; if (x.defaultColor) p.defaultColor = x.defaultColor; } });
-if (typeof SETTINGS !== "undefined") PRODUCTS.forEach(p => { const x = (SETTINGS.products || {})[p.id]; if (x) { if (typeof x.price === "number") p.price = x.price; if (Array.isArray(x.soldOut)) p.soldOut = x.soldOut; if (typeof x.featured === "boolean") p.featured = x.featured; } });
+if (typeof SETTINGS !== "undefined") PRODUCTS.forEach(p => { const x = (SETTINGS.products || {})[p.id]; if (x) { if (typeof x.price === "number") p.price = x.price; if (Array.isArray(x.soldOut)) p.soldOut = x.soldOut; if (typeof x.featured === "boolean") p.featured = x.featured; ["name", "desc", "credit"].forEach(k => { if (typeof x[k] === "string") p[k] = x[k]; }); } });
+if (typeof SETTINGS !== "undefined") {
+  const S = SETTINGS;
+  ["meetupSpots", "replyTime", "payment", "shipPayment", "area"].forEach(k => { if (S.shop && S.shop[k] !== undefined) SHOP[k] = S.shop[k]; });  // emails can't be overridden
+  if (Array.isArray(S.faq)) { FAQ.length = 0; S.faq.forEach(x => FAQ.push(x)); }
+  if (S.care) {
+    if (Array.isArray(S.care.prints)) { CARE.prints.length = 0; S.care.prints.forEach(x => CARE.prints.push(x)); }
+    CARE.items.forEach(i => { const o = (S.care.items || {})[i.id]; if (o) { if (typeof o.text === "string") i.text = o.text; if (typeof o.video === "string") i.video = o.video; } });
+  }
+}
 const $ = s => document.querySelector(s);
 const money = n => "$" + n.toFixed(2);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -40,6 +49,7 @@ const list = () => {
 };
 const setQ = v => { sq = v; $("#list").innerHTML = list(); };
 const setCat = k => { scat = k; $(".chips").innerHTML = chips(); $("#list").innerHTML = list(); };
+const fill = t => String(t).replace(/\{(\w+)\}/g, (m, k) => typeof SHOP[k] === "string" ? SHOP[k] : m);
 const views = {
   home: () => `
     <section class="hero sm">
@@ -68,7 +78,7 @@ const views = {
       <form onsubmit="add(event,'${p.id}')">
         <h1 style="font-size:2.2rem">${esc(p.name)}</h1>
         <p class="price" style="font-size:1.4rem">${money(p.price)}</p>
-        <p>${esc(p.desc)}</p>${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}${CARE.items.some(i => i.id === p.id) ? `<p><a href="#/care/${p.id}">How to use it</a></p>` : ""}
+        <p>${esc(p.desc)}</p>${p.credit ? `<p>${esc(p.credit)}</p>` : ""}${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}${CARE.items.some(i => i.id === p.id) ? `<p><a href="#/care/${p.id}">How to use it</a></p>` : ""}
         ${p.note ? `<p class="note">${esc(p.note)}</p>` : ""}${p.mystery ? `<p class="note">Mystery box: the items and colors are a surprise, so you can't choose them.</p>` : `<b>Color</b>
         <div class="sw">${swatches(p)}</div><small style="display:block;margin:-.5rem 0 1.2rem;color:var(--mute)">Colors vary slightly from spool to spool.</small><div id="chint" class="note" hidden>Colored means this one is hand-colored to look realistic.<label for="want" style="display:block;font-weight:600;margin:.6rem 0 .25rem">Want a main color? (optional)</label><input id="want" name="want" maxlength="40" placeholder="e.g. pink" autocomplete="off"><small style="display:block;margin-top:.3rem">We'll confirm if we can match it.</small></div>`}
         <b><label for="q">Quantity</label></b><br>
@@ -144,7 +154,7 @@ const views = {
     <p>${SHOP.ownerName ? `Hi, I'm ${esc(SHOP.ownerName)}. ` : ""}I got a 3D printer and started making things, and I've enjoyed it ever since. It's mostly fun. Sometimes a print fails, which is annoying, but that's part of the hobby. Now I'm selling a few of my favorites to people in ${esc(SHOP.area)} and beyond.</p></section>
     <div class="layers" aria-hidden="true"></div>
     <h2>Questions</h2>
-    ${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}
+    ${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(fill(a))}</p></details>`).join("")}
     <p style="margin-top:1.5rem"><a class="btn" href="#/shop">Browse the shop</a></p>`,
 
   thanks: () => `<section class="hero"><h1>Request sent. Thank you!</h1>

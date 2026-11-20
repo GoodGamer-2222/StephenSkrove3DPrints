@@ -4,7 +4,7 @@
 <style>
 body{font:16px/1.5 system-ui,sans-serif;max-width:640px;margin:0 auto;padding:1rem;background:#f4f6f5;color:#17201d}
 h1{font-size:1.5rem}h2{font-size:1.15rem;margin-top:1.6rem}label{display:block;font-weight:600;margin:1rem 0 .25rem}
-input,select,button{font:inherit;padding:.6rem;border:1px solid #d8dedb;border-radius:6px;width:100%;background:#fff}
+input,select,button,textarea{font:inherit;padding:.6rem;border:1px solid #d8dedb;border-radius:6px;width:100%;background:#fff}
 input[type=checkbox]{width:auto;padding:0}label.chk{display:inline-flex;gap:.4rem;align-items:center;font-weight:400;margin:.2rem .9rem .2rem 0}
 button{background:#0e6f62;color:#fff;border:0;cursor:pointer;font-weight:600;margin-top:.8rem}button:disabled{opacity:.6}
 button.s,button.t{width:auto;background:#fff;color:#17201d;border:1px solid #d8dedb;padding:.3rem .7rem;margin:0 .3rem .3rem 0}
@@ -19,7 +19,7 @@ button.t.on{background:#0e6f62;color:#fff}
 <div id="tokbox"><label for="tok">GitHub token</label><input id="tok" type="password" autocomplete="off">
 <button id="savetok" type="button">Save token on this device</button></div>
 <div id="app" hidden>
-<div class="tabs"><button class="t on" data-t="photos" type="button">Photos</button><button class="t" data-t="prices" type="button">Prices &amp; stock</button><button class="t" data-t="bar" type="button">Announcement</button></div>
+<div class="tabs"><button class="t on" data-t="photos" type="button">Photos</button><button class="t" data-t="prices" type="button">Prices &amp; stock</button><button class="t" data-t="words" type="button">Wording</button><button class="t" data-t="shop" type="button">Shop &amp; pages</button><button class="t" data-t="bar" type="button">Announcement</button></div>
 <section id="photos">
 <label for="prod">Product (each photo below can be changed)</label><select id="prod"></select>
 <label for="files">Photos (choose as many as you like; the first one for a product becomes its main photo if it has none)</label><input id="files" type="file" accept="image/*" multiple>
@@ -35,6 +35,29 @@ button.t.on{background:#0e6f62;color:#fff}
 <select id="sprod" aria-label="Product"></select><div id="scols"></div><button id="ssave" type="button">Save stock for this product</button>
 <h2>Out of stock everywhere</h2><p>Tick a color you've run out of. It shows as sold out on every product.</p>
 <div id="gcols"></div><button id="gsave" type="button">Save</button>
+</section>
+<section id="words" hidden>
+<h2>Product wording</h2>
+<select id="dprod" aria-label="Product"></select>
+<label for="dname">Name</label><input id="dname">
+<label for="ddesc">Description</label><textarea id="ddesc" rows="5"></textarea>
+<label for="dcredit">Designer credit</label><input id="dcredit" placeholder="e.g. Design by Name on Printables.">
+<p class="note">The credit shows as its own line under the description. You'll be asked to confirm before removing one.</p>
+<button id="dsave" type="button">Save wording for this product</button>
+</section>
+<section id="shop" hidden>
+<h2>Shop details</h2><p class="note">Your email addresses can't be changed here.</p>
+<label for="smeet">Meetup spots (one per line)</label><textarea id="smeet" rows="3"></textarea>
+<label for="sreply">Reply time</label><input id="sreply">
+<label for="spay">How meetup customers pay</label><input id="spay">
+<label for="sship">Payment options for shipped orders</label><input id="sship">
+<label for="sarea">Area</label><input id="sarea">
+<button id="shsave" type="button">Save shop details</button>
+<h2>FAQ</h2><p>In answers, {contactEmail}, {payment}, {shipPayment}, and {area} fill in automatically.</p>
+<div id="faq"></div><button class="s" id="faqadd" type="button">Add a question</button><br><button id="faqsave" type="button">Save FAQ</button>
+<h2>Care page</h2>
+<label for="cprints">Looking after prints (one tip per line)</label><textarea id="cprints" rows="6"></textarea>
+<div id="citems"></div><button id="csave" type="button">Save care page</button>
 </section>
 <section id="bar" hidden>
 <h2>Announcement bar</h2><p>A one-line message across the top of every page, for things like "Holiday orders close Dec 10."</p>
@@ -120,7 +143,7 @@ function drawStock() {
 }
 function drawGlobal() { $("#gcols").innerHTML = Object.keys(COLORS).map(c => chk(c, (settings.soldOutColors || []).includes(c))).join(""); }
 function drawBar() { const a = settings.announcement || {}; $("#aon").checked = !!a.on; $("#atext").value = a.text || ""; }
-function redraw() { drawPhotos(); drawPrices(); drawStock(); drawGlobal(); drawBar(); drawQueue(); }
+function redraw() { drawPhotos(); drawPrices(); drawStock(); drawGlobal(); drawBar(); drawQueue(); drawWords(); drawShop(); }
 
 async function run(label, fn, btn) {
   if (btn) btn.disabled = true;
@@ -134,12 +157,13 @@ async function start() {
     await load();
     $("#prod").innerHTML = PRODUCTS.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
     $("#sprod").innerHTML = PRODUCTS.filter(p => !p.mystery).map(p => `<option value="${p.id}">${p.name}</option>`).join("");
+    $("#dprod").innerHTML = PRODUCTS.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
     redraw(); say("Ready.");
   } catch (e) { say("Couldn't connect: " + e.message + "\nCheck the token and that it has access to this repository."); $("#tokbox").hidden = false; $("#app").hidden = true; }
 }
 $("#savetok").onclick = () => { try { localStorage.setItem("ghtok", $("#tok").value.trim()); } catch (e) {} $("#tok").value = ""; start(); };
 $("#forget").onclick = () => { try { localStorage.removeItem("ghtok"); } catch (e) {} location.reload(); };
-$(".tabs").onclick = e => { const b = e.target.closest("button"); if (!b) return; ["photos", "prices", "bar"].forEach(id => { $("#" + id).hidden = id !== b.dataset.t; }); document.querySelectorAll(".t").forEach(x => x.classList.toggle("on", x === b)); };
+$(".tabs").onclick = e => { const b = e.target.closest("button"); if (!b) return; ["photos", "prices", "words", "shop", "bar"].forEach(id => { $("#" + id).hidden = id !== b.dataset.t; }); document.querySelectorAll(".t").forEach(x => x.classList.toggle("on", x === b)); };
 
 // photos
 $("#prod").onchange = () => { drawPhotos(); queue.forEach(r => { if (!r.manual) r.id = $("#prod").value; }); drawQueue(); };
@@ -193,6 +217,53 @@ $("#gsave").onclick = () => run("Saving", async () => {
   settings.soldOutColors = [...set]; if (!set.size) delete settings.soldOutColors;
   await saveSettings("Update colors out of stock everywhere"); gPend = {};
 }, $("#gsave"));
+
+// product wording, shop details, FAQ, care page
+const eh = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+const lines = v => v.split("\n").map(x => x.trim()).filter(Boolean);
+const shopCur = k => (settings.shop || {})[k] ?? SHOP[k];
+const faqCur = () => settings.faq ?? FAQ;
+const careCur = () => { const o = settings.care || {}; return { prints: o.prints ?? CARE.prints, items: CARE.items.map(i => ({ ...i, ...((o.items || {})[i.id] || {}) })) }; };
+let faqDraft = [];
+function drawWords() { const p = base($("#dprod").value); if (!p) return; const o = ov(p.id); $("#dname").value = o.name ?? p.name; $("#ddesc").value = o.desc ?? p.desc; $("#dcredit").value = o.credit ?? (p.credit || ""); }
+function drawFaq() { $("#faq").innerHTML = faqDraft.map(([q, a], i) => `<div class="row" style="align-items:flex-start;flex-wrap:wrap"><input data-i="${i}" data-k="0" value="${eh(q)}" aria-label="Question ${i + 1}"><textarea data-i="${i}" data-k="1" rows="3" aria-label="Answer ${i + 1}">${eh(a)}</textarea><button class="s" type="button" data-i="${i}">Remove</button></div>`).join(""); }
+function drawShop() {
+  $("#smeet").value = shopCur("meetupSpots").join("\n"); $("#sreply").value = shopCur("replyTime"); $("#spay").value = shopCur("payment"); $("#sship").value = shopCur("shipPayment"); $("#sarea").value = shopCur("area");
+  faqDraft = faqCur().map(x => [...x]); drawFaq();
+  const c = careCur(); $("#cprints").value = c.prints.join("\n");
+  $("#citems").innerHTML = c.items.map(i => `<h3>${eh(i.title)}</h3><label for="ct-${i.id}">How to use it</label><textarea id="ct-${i.id}" rows="3">${eh(i.text)}</textarea><label for="cv-${i.id}">Video file (like videos/thumb-drum.mp4, or leave blank)</label><input id="cv-${i.id}" value="${eh(i.video)}">`).join("");
+}
+$("#dprod").onchange = drawWords;
+$("#dsave").onclick = () => run("Saving wording", async () => {
+  const p = base($("#dprod").value), name = $("#dname").value.trim(), desc = $("#ddesc").value.trim(), credit = $("#dcredit").value.trim();
+  if (!name || !desc) throw new Error("The name and description can't be empty.");
+  if (!credit && (ov(p.id).credit ?? p.credit) && !confirm("Remove the designer credit from " + p.name + "?")) throw new Error("Cancelled, so the credit was kept.");
+  setOv(p.id, "name", name, p.name); setOv(p.id, "desc", desc, p.desc); setOv(p.id, "credit", credit, p.credit || "");
+  await saveSettings("Update wording for " + p.id);
+}, $("#dsave"));
+$("#shsave").onclick = () => run("Saving shop details", async () => {
+  const v = { meetupSpots: lines($("#smeet").value), replyTime: $("#sreply").value.trim(), payment: $("#spay").value.trim(), shipPayment: $("#sship").value.trim(), area: $("#sarea").value.trim() };
+  if (!v.replyTime || !v.payment || !v.shipPayment || !v.area) throw new Error("Please fill in every box except the meetup spots.");
+  const o = {}; for (const k in v) if (JSON.stringify(v[k]) !== JSON.stringify(SHOP[k])) o[k] = v[k];
+  if (Object.keys(o).length) settings.shop = o; else delete settings.shop;
+  await saveSettings("Update shop details");
+}, $("#shsave"));
+$("#faq").oninput = e => { const d = e.target.dataset; if (d && d.k !== undefined) faqDraft[+d.i][+d.k] = e.target.value; };
+$("#faq").onclick = e => { const b = e.target.closest("button"); if (!b) return; faqDraft.splice(+b.dataset.i, 1); drawFaq(); };
+$("#faqadd").onclick = () => { faqDraft.push(["", ""]); drawFaq(); };
+$("#faqsave").onclick = () => run("Saving FAQ", async () => {
+  const f = faqDraft.map(([q, a]) => [q.trim(), a.trim()]);
+  if (f.some(x => !x[0] || !x[1])) throw new Error("Every question needs an answer. Remove or finish the empty ones.");
+  if (JSON.stringify(f) === JSON.stringify(FAQ)) delete settings.faq; else settings.faq = f;
+  await saveSettings("Update FAQ");
+}, $("#faqsave"));
+$("#csave").onclick = () => run("Saving care page", async () => {
+  const prints = lines($("#cprints").value), items = {};
+  for (const i of CARE.items) { const text = $("#ct-" + i.id).value.trim(), video = $("#cv-" + i.id).value.trim(); if (!text) throw new Error("Each how-to needs some text."); if (text !== i.text || video !== i.video) items[i.id] = { text, video }; }
+  const o = {}; if (JSON.stringify(prints) !== JSON.stringify(CARE.prints)) o.prints = prints; if (Object.keys(items).length) o.items = items;
+  if (Object.keys(o).length) settings.care = o; else delete settings.care;
+  await saveSettings("Update care page");
+}, $("#csave"));
 
 // announcement bar
 $("#asave").onclick = () => run("Saving announcement", async () => {

@@ -82,6 +82,13 @@ Paste or upload this file at the start of a new chat so Claude can pick up where
 - Thumb Drum video: the owner's 6.1 MB file goes in the repo as `videos/thumb-drum.mp4` (MP4 plays everywhere; iPhone MOV may not). Thumb Piano and Wallet videos come later: set their `video` path in `CARE`. If a video file is missing, the page says "Video coming soon."
 - Links (decided, option B): footer links "Custom prints" and "Care & how-to"; the shop page custom note and the no-search-results message link to the custom page; FAQ custom answer points to the footer link. Not in the top menu.
 
+## Editing more from admin.html (A and B decided and built; D pending)
+- Wording tab: edit a product's name, description, and designer credit. Credits were split out of descriptions into a separate `credit` field (shown as its own normal-size line under the description, not a tiny footer). Clearing a credit asks for confirmation.
+- Shop & pages tab: meetup spots, reply time, meetup payment wording, shipped-order payment options, area; the FAQ (add/remove/edit; placeholders {contactEmail}, {payment}, {shipPayment}, {area} fill in automatically); the Care page tips and each how-to text and video path.
+- Email addresses (`email` FormSubmit alias and `contactEmail`) are NOT editable from admin, and `app.js` only accepts overrides for the five shop fields above even if `settings.js` is tampered with.
+- Stored in `settings.js` (`shop`, `faq`, `care`, and per-product `name`/`desc`/`credit`), merged over `products.js` by `app.js`.
+- D (add and remove products from admin, choosing photos instead of icons) was requested; the owner said it's fine to do after A and B. Design decisions still to propose: how a new product gets its picture (no icon), category and color choices, credit entry, and delete vs hide.
+
 ## Photos (decided)
 - Mix of approaches: print the first item of each kind, photograph it on the print bed with the owner's light, plus an in-hand shot for scale and an in-use shot.
 - Color rule (option C): main photo and in-hand photo use the same mid-tone color (blue or red work well; avoid black and white). The in-use photo can be any color.
