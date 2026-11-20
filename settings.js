@@ -62,6 +62,10 @@ const SETTINGS = {
     "van": {
       "desc": "A hard, angular van with stylized, minimalist features and working wheels. Simple and fun to roll around.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "car": {
+      "desc": "A hard, angular SUV/car with stylized, minimalist features and working wheels. Simple and fun to roll around.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
