@@ -25,7 +25,9 @@ const SETTINGS = {
       "credit": "Design by Buchtomil on Printables."
     },
     "thumb-drum": {
-      "featured": true
+      "featured": true,
+      "desc": "A pocket-sized hand percussion tool that makes distinct hollow tones when you play it. Includes two attached spring-style thumb drumsticks. To play, hold the finger notches between your index and middle fingers and flick the drumstick lever with your thumbnail.",
+      "credit": "Design by LoboCNC on Printables."
     },
     "rocket-truck": {
       "desc": "A rugged truck with a moving, rotating rocket pod assembly. The wheels move too, so it rolls along. Great for pretend play or a desk display. Based on the RM-70 Vampire 4D rocket launcher.",
