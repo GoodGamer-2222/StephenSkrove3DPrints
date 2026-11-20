@@ -116,6 +116,10 @@ const SETTINGS = {
     "cat": {
       "desc": "A cartoonish cat with a big head, sitting down. A cute little desk or shelf decoration.",
       "credit": "Design by CHICKEMM on Printables."
+    },
+    "wallet": {
+      "desc": "A slim card carrier that fans out up to 5 cards, each in its own pivoting sleeve, so you can see them all and easily grab the right one. It opens and closes with a click.",
+      "credit": "Design by LoboCNC on Printables."
     }
   }
 };
