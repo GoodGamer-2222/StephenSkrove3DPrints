@@ -132,6 +132,10 @@ const SETTINGS = {
     "tank-sign": {
       "desc": "A sign for the outside of a fish tank that says \"Do not tap or knock on glass. It can stress or harm the animals.\" A friendly reminder for visitors.",
       "credit": "Design by Daniel Oculus on Printables."
+    },
+    "benchy": {
+      "desc": "The iconic 3D printing benchmark tugboat, a fun collector's novelty item. A classic for anyone who loves 3D printing.",
+      "credit": "Model from Troy peterson on Printables."
     }
   }
 };
