@@ -58,6 +58,10 @@ const SETTINGS = {
     "bobcat": {
       "desc": "A compact 4-wheeled skid-steer utility loader. The front loader arms move by hand and the wheels rotate freely, so it's ready to scoop and push.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "van": {
+      "desc": "A hard, angular van with stylized, minimalist features and working wheels. Simple and fun to roll around.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
