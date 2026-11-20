@@ -128,6 +128,10 @@ const SETTINGS = {
     "egg": {
       "desc": "A smooth, seamless oval print, ideal for custom painting projects or for showing poultry where to lay eggs.",
       "credit": "Design by Ts3D on Printables."
+    },
+    "tank-sign": {
+      "desc": "A sign for the outside of a fish tank that says \"Do not tap or knock on glass. It can stress or harm the animals.\" A friendly reminder for visitors.",
+      "credit": "Design by Daniel Oculus on Printables."
     }
   }
 };
