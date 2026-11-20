@@ -38,6 +38,10 @@ const SETTINGS = {
     "backhoe": {
       "desc": "A backhoe with a fully positionable rear digging arm and working wheels, ready for pretend digging on any job site.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "tanker-semi": {
+      "desc": "A long-haul liquid transporter: a cab pulling a cylindrical tank on a flatbed trailer. The trailer is detachable and comes with 4 spare wheels, and the model's wheels work.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
