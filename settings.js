@@ -102,6 +102,10 @@ const SETTINGS = {
     "capybara": {
       "desc": "An articulated baby capybara with a jointed body that bends and wiggles when you move it. A relaxed little desk buddy, small enough to be a pocket pet.",
       "credit": "Design by Fulcrum Studio on Printables."
+    },
+    "thumb-piano": {
+      "desc": "A fully playable (though not very musical) acoustic instrument shell fitted with plastic plucking tines. Pluck the tines to make notes.",
+      "credit": "Design by Alpes86 on Printables."
     }
   }
 };
