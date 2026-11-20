@@ -70,6 +70,10 @@ const SETTINGS = {
     "car": {
       "desc": "A hard, angular SUV/car with stylized, minimalist features and working wheels. Simple and fun to roll around.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "snake": {
+      "desc": "An articulated snake with a long, jointed body that bends and wiggles when you move it. Pose it, coil it up, or just fidget with it.",
+      "credit": "Design by TechnicaL on Printables."
     }
   }
 };
