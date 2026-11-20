@@ -78,6 +78,10 @@ const SETTINGS = {
     "rex": {
       "desc": "A flat, 2D dinosaur with an articulated body, so it wiggles and flexes when you move it. A fun fidget or desk buddy.",
       "credit": "Original design by Kirbs on Thingiverse, remixed by AgentSCAD on Printables."
+    },
+    "slug": {
+      "desc": "A friendly articulated slug with feelers and a segmented body that moves freely when you wiggle it. A quirky little fidget or desk buddy.",
+      "credit": "Design by Copper Keep on Printables."
     }
   }
 };
