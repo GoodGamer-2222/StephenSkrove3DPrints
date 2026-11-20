@@ -46,6 +46,10 @@ const SETTINGS = {
     "container-semi": {
       "desc": "A heavy freight cab connected to a detachable shipping container trailer. The container (a hollow rectangular crate) comes on and off the trailer easily, so you can fill it with your own mini cargo.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "offroad-semi": {
+      "desc": "An eight-wheeled off-road semi, designed to look like a Tatra 813, the Czechoslovak heavy off-road truck built from 1967 to 1982. The wheels work, so it rolls along.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
