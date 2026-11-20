@@ -74,6 +74,10 @@ const SETTINGS = {
     "snake": {
       "desc": "An articulated snake with a long, jointed body that bends and wiggles when you move it. Pose it, coil it up, or just fidget with it.",
       "credit": "Design by TechnicaL on Printables."
+    },
+    "rex": {
+      "desc": "A flat, 2D dinosaur with an articulated body, so it wiggles and flexes when you move it. A fun fidget or desk buddy.",
+      "credit": "Original design by Kirbs on Thingiverse, remixed by AgentSCAD on Printables."
     }
   }
 };
