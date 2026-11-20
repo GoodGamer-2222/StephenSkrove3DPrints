@@ -1,2 +1,7 @@
-// Shop settings (price changes, sold-out colors, home page picks, announcement), managed by admin.html. Please don't edit by hand.
-const SETTINGS = {};
+// Managed by admin.html. Please don't edit by hand.
+const SETTINGS = {
+  "announcement": {
+    "on": false,
+    "text": "Holiday Pricing!!! 20% off every single order! Discount will be calculated and sent by email after you submit your order."
+  }
+};
