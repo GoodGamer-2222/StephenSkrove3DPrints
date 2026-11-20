@@ -54,6 +54,10 @@ const SETTINGS = {
     "dump-truck": {
       "desc": "A 6-wheeled dump truck with a dump bucket that really dumps, plus working wheels. Haul a load and tip it out.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "bobcat": {
+      "desc": "A compact 4-wheeled skid-steer utility loader. The front loader arms move by hand and the wheels rotate freely, so it's ready to scoop and push.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
