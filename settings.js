@@ -82,6 +82,10 @@ const SETTINGS = {
     "slug": {
       "desc": "A friendly articulated slug with feelers and a segmented body that moves freely when you wiggle it. A quirky little fidget or desk buddy.",
       "credit": "Design by Copper Keep on Printables."
+    },
+    "lizard": {
+      "desc": "An articulated lizard whose body, legs, and tail all move, so you can pose it however you like or let it climb your monitor.",
+      "credit": "Design by Kris Cyber on Printables."
     }
   }
 };
