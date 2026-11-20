@@ -6,5 +6,16 @@ const SETTINGS = {
   },
   "soldOutColors": [
     "Black / Blue Glitter"
-  ]
+  ],
+  "products": {
+    "gecko": {
+      "price": 12
+    },
+    "mystery-desk-4": {
+      "price": 35
+    },
+    "mystery-desk-8": {
+      "price": 50
+    }
+  }
 };
