@@ -128,5 +128,25 @@ const FAQ = [
   ["How do mystery boxes work?", "Each box holds 4 or 8 items from one category: cars, articulated toys, or desk toys and functional items. The items and colors are a surprise, so you can't choose them."],
   ["What are the products made of?", "PLA plastic, printed on a 3D printer."],
   ["What if there's a problem with my order?", `Send a photo of the problem to ${SHOP.contactEmail} and we'll happily refund or replace it.`],
-  ["Can you make something custom?", `Maybe! Email us at ${SHOP.contactEmail} with what you have in mind. We'll tell you if we can do it and what it would cost.`]
+  ["Can you make something custom?", `Maybe! Use the Custom prints link at the bottom of any page to tell us what you have in mind. We'll let you know if we can do it and what it would cost.`]
 ];
+
+// Care and how-to page. "video" is a file you upload to the videos/ folder (leave "" for "video coming soon").
+// Item ids match product ids, and those products get a "How to use it" link.
+const CARE = {
+  prints: [
+    "Keep them away from heat. They're made of PLA plastic, which softens in a hot car or in strong sun for long periods, so don't leave them on a dashboard.",
+    "Clean them with a soft, damp cloth. Skip the dishwasher, the microwave, and hot water.",
+    "They aren't food-safe, so don't use them for eating or drinking.",
+    "Be gentle with moving parts. Work joints and wheels back and forth slowly, and don't force them.",
+    "Keep small parts away from children under 3. Items with small parts say so on their page."
+  ],
+  items: [
+    { id: "thumb-drum", title: "Thumb Drum", video: "videos/thumb-drum.mp4",
+      text: "Hold the finger notches between your index and middle fingers, then flick the drumstick lever with your thumbnail. Each flick makes a hollow drum sound." },
+    { id: "thumb-piano", title: "Thumb Piano", video: "",
+      text: "Hold it in both hands and pluck the plastic tines with your thumbs to make notes. It's plastic, so it won't sound like a real kalimba, but it's fun to play." },
+    { id: "wallet", title: "Flat Wallet", video: "",
+      text: "Slide a card into each sleeve, up to 5. Open it and the cards fan out so you can see them all and grab the one you need. It closes with a click." }
+  ]
+};

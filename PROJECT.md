@@ -76,6 +76,12 @@ Paste or upload this file at the start of a new chat so Claude can pick up where
 - Saved in `settings.js` (`SETTINGS = { products: { id: { price, soldOut, featured } }, soldOutColors: [], announcement: { on, text } }`), which `app.js` merges over `products.js` (like `photos.js`). Only differences from `products.js` are stored. Cart items are re-priced to current prices on load, and items for removed products are dropped.
 - New files: `settings.js`; `index.html` loads it and has the `#announce` bar; `style.css` styles it. Don't re-upload an empty `settings.js` from a zip after using the admin page, or settings will be erased.
 
+## Custom Print page and Care page (decided, built)
+- `#/custom`: explains what can be asked for (color combos or a main color, a design found online with a link, bigger batches), what may be refused (copyrighted/branded items, weapons, too big or delicate; DRAFT wording the owner hasn't approved), and a price note (quote after seeing the request, nothing charged until agreed). Short form (name, email, phone optional, what to make, design link, size, colors, quantity, needed by, meetup/delivery/ship) sent through FormSubmit like orders; success shows `#/customsent`. Chosen: option C.
+- `#/care`: looking after prints (PLA heat warning, damp cloth, not food-safe, gentle with joints, small parts; general PLA knowledge, owner should confirm) and how to use the Thumb Drum, Thumb Piano, and Flat Wallet. Content lives in `CARE` in `products.js`. Products with a CARE item show a "How to use it" link to their section.
+- Thumb Drum video: the owner's 6.1 MB file goes in the repo as `videos/thumb-drum.mp4` (MP4 plays everywhere; iPhone MOV may not). Thumb Piano and Wallet videos come later: set their `video` path in `CARE`. If a video file is missing, the page says "Video coming soon."
+- Links (decided, option B): footer links "Custom prints" and "Care & how-to"; the shop page custom note and the no-search-results message link to the custom page; FAQ custom answer points to the footer link. Not in the top menu.
+
 ## Photos (decided)
 - Mix of approaches: print the first item of each kind, photograph it on the print bed with the owner's light, plus an in-hand shot for scale and an in-use shot.
 - Color rule (option C): main photo and in-hand photo use the same mid-tone color (blue or red work well; avoid black and white). The in-use photo can be any color.

@@ -30,13 +30,13 @@ const out = (p, c) => (p.soldOut || []).includes(c) || ((typeof SETTINGS !== "un
 const avail = p => p.colors.filter(c => !out(p, c));
 const swatches = p => p.colors.map(c => `<label class="${out(p, c) ? "out" : ""}"><input type="radio" name="color" value="${c}" onchange="cnote()" ${out(p, c) ? "disabled" : c === (avail(p).includes(p.defaultColor) ? p.defaultColor : avail(p)[0]) ? "checked" : ""}><span class="dot" style="background:${COLORS[c] || "#ccc"}"></span>${esc(c)}${out(p, c) ? " (sold out)" : ""}</label>`).join("");
 
-const custom = () => `<p class="note">Want something different, like another color, size, or design? <a href="mailto:${esc(SHOP.contactEmail)}?subject=${encodeURIComponent("Custom print request")}">Email us</a> and tell us what you have in mind. We'll let you know if we can do it and what it would cost.</p>`;
+const custom = () => `<p class="note">Want something different, like another color, size, or design? <a href="#/custom">Tell us about it</a> and we'll let you know if we can do it and what it would cost.</p>`;
 let sq = "", scat = "";
 const chips = () => ["", ...Object.keys(CATS)].map(k => `<button type="button" class="chip" aria-pressed="${scat === k}" onclick="setCat('${k}')">${k ? CATS[k].label : "All"}</button>`).join("");
 const list = () => {
   const w = sq.toLowerCase().split(/\s+/).filter(Boolean).map(x => x.length > 3 ? x.replace(/s$/, "") : x);
   const r = PRODUCTS.filter(p => { const tk = `${p.name} ${p.tags || ""} ${CATS[p.cat].label} ${CATS[p.cat].words}`.toLowerCase().split(/\W+/); return (!scat || p.cat === scat) && w.every(x => tk.some(t => t.startsWith(x))); });
-  return r.length ? r.map(card).join("") : `<p>No matches. Try another word, or <a href="mailto:${esc(SHOP.contactEmail)}?subject=${encodeURIComponent("Custom print request")}">ask about a custom print</a>.</p>`;
+  return r.length ? r.map(card).join("") : `<p>No matches. Try another word, or <a href="#/custom">ask about a custom print</a>.</p>`;
 };
 const setQ = v => { sq = v; $("#list").innerHTML = list(); };
 const setCat = k => { scat = k; $(".chips").innerHTML = chips(); $("#list").innerHTML = list(); };
@@ -68,7 +68,7 @@ const views = {
       <form onsubmit="add(event,'${p.id}')">
         <h1 style="font-size:2.2rem">${esc(p.name)}</h1>
         <p class="price" style="font-size:1.4rem">${money(p.price)}</p>
-        <p>${esc(p.desc)}</p>${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}
+        <p>${esc(p.desc)}</p>${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}${CARE.items.some(i => i.id === p.id) ? `<p><a href="#/care/${p.id}">How to use it</a></p>` : ""}
         ${p.note ? `<p class="note">${esc(p.note)}</p>` : ""}${p.mystery ? `<p class="note">Mystery box: the items and colors are a surprise, so you can't choose them.</p>` : `<b>Color</b>
         <div class="sw">${swatches(p)}</div><small style="display:block;margin:-.5rem 0 1.2rem;color:var(--mute)">Colors vary slightly from spool to spool.</small><div id="chint" class="note" hidden>Colored means this one is hand-colored to look realistic.<label for="want" style="display:block;font-weight:600;margin:.6rem 0 .25rem">Want a main color? (optional)</label><input id="want" name="want" maxlength="40" placeholder="e.g. pink" autocomplete="off"><small style="display:block;margin-top:.3rem">We'll confirm if we can match it.</small></div>`}
         <b><label for="q">Quantity</label></b><br>
@@ -103,6 +103,41 @@ const views = {
       <p><button class="btn">Send order request</button></p><p class="err" id="err" role="alert"></p>
     </form>`;
   },
+
+  custom: () => `<h2>Custom prints</h2>
+    <p>Have an idea? Tell us what you want and we'll let you know if we can make it.</p>
+    <h3>What you can ask for</h3>
+    <ul><li>A color combination that isn't listed, or a main color for a hand-colored (Colored) print.</li>
+    <li>A design you found online. Send the link, and we'll check that it's okay to print and sell.</li>
+    <li>A bigger batch of something from the shop, like party favors or gifts.</li>
+    <li>Not sure? Just ask.</li></ul>
+    <h3>What we may say no to</h3>
+    <p>Copyrighted characters and branded items, weapons or weapon parts, and anything too big or too delicate for our printer.</p>
+    <div class="note"><b>Price:</b> we quote after we see your request. It depends on the size, how long it takes to print, and the colors. Nothing is charged until you say yes.</div>
+    <form onsubmit="sendCustom(event)">
+      <label class="f" for="cname">Your name</label><input id="cname" name="name" required autocomplete="name">
+      <label class="f" for="cemail">Email</label><input id="cemail" name="email" type="email" required autocomplete="email">
+      <label class="f" for="cphone">Phone (optional)</label><input id="cphone" name="phone" type="tel" autocomplete="tel">
+      <label class="f" for="creq">What would you like us to make?</label><textarea id="creq" name="request" rows="4" required></textarea>
+      <label class="f" for="clink">Link to a design (optional)</label><input id="clink" name="design_link" type="url" placeholder="https://">
+      <label class="f" for="csize">Size (optional)</label><input id="csize" name="size" placeholder="e.g. about the size of my hand">
+      <label class="f" for="ccol">Colors (optional)</label><input id="ccol" name="colors" placeholder="e.g. blue with gold glitter, or mostly pink">
+      <label class="f" for="cqty">How many?</label><input id="cqty" name="quantity" type="number" min="1" value="1">
+      <label class="f" for="cwhen">When do you need it? (optional)</label><input id="cwhen" name="needed_by" placeholder="e.g. by Dec 15, or no rush">
+      <label class="f" for="cful">How would you like to get it?</label>
+      <select id="cful" name="fulfillment"><option>Meet up in person</option><option>Local delivery (there will be a small additional fee)</option><option>Ship it to me</option></select>
+      <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p><button class="btn">Send request</button></p><p class="err" id="cerr" role="alert"></p>
+    </form>`,
+
+  customsent: () => `<section class="hero"><h1>Request sent. Thank you!</h1>
+    <p>We'll email you ${esc(SHOP.replyTime || "soon")} from ${esc(SHOP.contactEmail)} to say whether we can make it and what it would cost. Nothing is charged until you agree.</p>
+    <a class="btn" href="#/shop">Back to the shop</a></section>`,
+
+  care: () => `<h2>Care and how-to</h2>
+    <h3>Looking after your prints</h3><ul>${CARE.prints.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+    <h3>How to use the unusual ones</h3>
+    ${CARE.items.map(i => `<section id="c-${i.id}" style="margin:1.5rem 0"><h3>${esc(i.title)}</h3><p>${esc(i.text)}</p>${i.video ? `<video controls playsinline preload="metadata" src="${esc(i.video)}" style="max-width:100%;border-radius:8px" onerror="this.outerHTML='<p>Video coming soon.</p>'"></video>` : `<p><i>A video is coming soon.</i></p>`}</section>`).join("")}`,
 
   about: () => `<h1 style="font-size:2.2rem">About</h1>
     <section class="about">${SHOP.ownerPhoto ? `<img class="me" src="${esc(SHOP.ownerPhoto)}" alt="${esc(SHOP.ownerName || "The maker")}">` : ""}
@@ -145,6 +180,20 @@ const qty = (i, d) => { cart[i].q += d; if (cart[i].q < 1) cart.splice(i, 1); sa
 const rm = i => { cart.splice(i, 1); save(); render(); };
 const nav = () => $("#cartlink").innerHTML = `Request list <span class="badge${count() ? "" : " zero"}">${count()}</span>`;
 
+async function sendCustom(e) {
+  e.preventDefault();
+  const f = e.target, b = f.querySelector(".btn"), d = Object.fromEntries(new FormData(f));
+  d._subject = "Custom print request from " + d.name; d._template = "table"; d._captcha = "false";
+  b.disabled = true; b.textContent = "Sending...";
+  try {
+    const r = await fetch("https://formsubmit.co/ajax/" + SHOP.email, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(d) });
+    if (!r.ok) throw 0;
+    location.hash = "/customsent";
+  } catch (x) {
+    b.disabled = false; b.textContent = "Send request";
+    $("#cerr").textContent = "That didn't send. Please try again, or email us directly at " + SHOP.contactEmail + ".";
+  }
+}
 async function send(e) {
   e.preventDefault();
   const f = e.target, b = f.querySelector(".btn"), d = Object.fromEntries(new FormData(f));
@@ -171,9 +220,10 @@ function render() {
   document.title = SHOP.name;
   nav(); window.scrollTo(0, 0);
   if ($("#chint")) cnote();
+  if (page === "care" && arg) { const el = $("#c-" + arg); el && el.scrollIntoView && el.scrollIntoView(); }
 }
 if (typeof SETTINGS !== "undefined" && SETTINGS.announcement && SETTINGS.announcement.on && SETTINGS.announcement.text) { $("#announce").textContent = SETTINGS.announcement.text; $("#announce").hidden = false; }
 $("#brand").textContent = SHOP.name;
-$("#foot").innerHTML = `${esc(SHOP.name)} · ${esc(SHOP.area)} · <a href="mailto:${esc(SHOP.contactEmail)}">${esc(SHOP.contactEmail)}</a> · <a href="mailto:${esc(SHOP.contactEmail)}?subject=Custom%20print%20request">Custom prints</a>`;
+$("#foot").innerHTML = `${esc(SHOP.name)} · ${esc(SHOP.area)} · <a href="mailto:${esc(SHOP.contactEmail)}">${esc(SHOP.contactEmail)}</a> · <a href="#/custom">Custom prints</a> · <a href="#/care">Care &amp; how-to</a>`;
 addEventListener("hashchange", render);
 render();
