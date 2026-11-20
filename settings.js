@@ -26,6 +26,10 @@ const SETTINGS = {
     "rocket-truck": {
       "desc": "A rugged truck with a moving, rotating rocket pod assembly. The wheels move too, so it rolls along. Great for pretend play or a desk display. Based on the RM-70 Vampire 4D rocket launcher.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "tow-truck": {
+      "desc": "A detailed flatbed tow truck with a functional ramp on the back for driving other model cars (like the included Skoda 120 car) onto the flatbed. Load one up and haul it away. The ramp folds and the wheels rotate. The included small car has working wheels and lots of detail.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
