@@ -42,6 +42,10 @@ const SETTINGS = {
     "tanker-semi": {
       "desc": "A long-haul liquid transporter: a cab pulling a cylindrical tank on a flatbed trailer. The trailer is detachable and comes with 4 spare wheels, and the model's wheels work.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "container-semi": {
+      "desc": "A heavy freight cab connected to a detachable shipping container trailer. The container (a hollow rectangular crate) comes on and off the trailer easily, so you can fill it with your own mini cargo.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
