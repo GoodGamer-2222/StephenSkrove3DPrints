@@ -22,6 +22,10 @@ const SETTINGS = {
     },
     "thumb-drum": {
       "featured": true
+    },
+    "rocket-truck": {
+      "desc": "A rugged truck with a moving, rotating rocket pod assembly. The wheels move too, so it rolls along. Great for pretend play or a desk display. Based on the RM-70 Vampire 4D rocket launcher.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
