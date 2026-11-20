@@ -139,6 +139,11 @@ const SETTINGS = {
     }
   },
   "shop": {
+    "meetupSpots": [
+      "Dutch Bros Coffee, 332 NW 6th St",
+      "Walmart Supercenter, 135 NE Terry Ln",
+      "The White Owl, 119 SE 6th St"
+    ],
     "shipPayment": "Apple Pay, Venmo, or Zelle"
   }
 };
