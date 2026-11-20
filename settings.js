@@ -124,6 +124,10 @@ const SETTINGS = {
     "fidget": {
       "desc": "A small joystick-style fidget to keep your hands busy. It can't actually be used for a video game.",
       "credit": "Design by Leah Konapelsky on Printables."
+    },
+    "egg": {
+      "desc": "A smooth, seamless oval print, ideal for custom painting projects or for showing poultry where to lay eggs.",
+      "credit": "Design by Ts3D on Printables."
     }
   }
 };
