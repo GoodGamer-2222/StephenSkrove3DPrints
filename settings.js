@@ -9,7 +9,9 @@ const SETTINGS = {
   ],
   "products": {
     "gecko": {
-      "price": 12
+      "price": 12,
+      "desc": "A little gecko with multiple interlocking tail segments that wiggle organically. The main body is not articulated, so all the wiggle comes from the tail.",
+      "credit": "Design by Timmy on Printables."
     },
     "mystery-desk-4": {
       "price": 35
