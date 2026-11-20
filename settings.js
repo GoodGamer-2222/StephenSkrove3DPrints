@@ -108,6 +108,10 @@ const SETTINGS = {
     "thumb-piano": {
       "desc": "A fully playable (though not very musical) acoustic instrument shell fitted with plastic plucking tines. Pluck the tines to make notes.",
       "credit": "Design by Alpes86 on Printables."
+    },
+    "wolf": {
+      "desc": "A modern, geometric tabletop statue with sharp, artistic polygon features. A good desk or shelf decoration. About 50 × 60 × 100 mm.",
+      "credit": "Design by Sarathy Srinath on Printables."
     }
   }
 };
