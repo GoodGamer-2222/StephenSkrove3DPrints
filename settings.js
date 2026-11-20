@@ -137,5 +137,8 @@ const SETTINGS = {
       "desc": "The iconic 3D printing benchmark tugboat, a fun collector's novelty item. A classic for anyone who loves 3D printing.",
       "credit": "Model from Troy peterson on Printables."
     }
+  },
+  "shop": {
+    "shipPayment": "Apple Pay, Venmo, or Zelle"
   }
 };
