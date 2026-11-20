@@ -120,6 +120,10 @@ const SETTINGS = {
     "wallet": {
       "desc": "A slim card carrier that fans out up to 5 cards, each in its own pivoting sleeve, so you can see them all and easily grab the right one. It opens and closes with a click.",
       "credit": "Design by LoboCNC on Printables."
+    },
+    "fidget": {
+      "desc": "A small joystick-style fidget to keep your hands busy. It can't actually be used for a video game.",
+      "credit": "Design by Leah Konapelsky (TinkerLink) on Printables."
     }
   }
 };
