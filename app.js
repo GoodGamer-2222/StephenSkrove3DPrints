@@ -1,9 +1,11 @@
 if (typeof PHOTOS !== "undefined") PRODUCTS.forEach(p => { const x = PHOTOS[p.id]; if (x) { if (x.images && x.images.length) p.images = x.images; if (x.defaultColor) p.defaultColor = x.defaultColor; } });
+if (typeof SETTINGS !== "undefined") PRODUCTS.forEach(p => { const x = (SETTINGS.products || {})[p.id]; if (x) { if (typeof x.price === "number") p.price = x.price; if (Array.isArray(x.soldOut)) p.soldOut = x.soldOut; if (typeof x.featured === "boolean") p.featured = x.featured; } });
 const $ = s => document.querySelector(s);
 const money = n => "$" + n.toFixed(2);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let cart = [], last = null;
 try { cart = JSON.parse(localStorage.getItem("cart") || "[]"); } catch (e) {}
+cart = cart.filter(c => PRODUCTS.some(p => p.id === c.id)); cart.forEach(c => { c.price = PRODUCTS.find(p => p.id === c.id).price; });
 const save = () => { try { localStorage.setItem("cart", JSON.stringify(cart)); } catch (e) {} };
 const total = () => cart.reduce((t, c) => t + c.price * c.q, 0);
 const count = () => cart.reduce((t, c) => t + c.q, 0);
@@ -24,7 +26,7 @@ const gallery = p => {
 const showPic = b => { $("#mainimg").src = b.firstElementChild.src; document.querySelectorAll(".th").forEach(t => t.classList.toggle("on", t === b)); };
 const card = p => `<a class="card" href="#/product/${p.id}">${img(p)}<div class="t"><b>${esc(p.name)}</b><span class="price">${money(p.price)}</span></div></a>`;
 
-const out = (p, c) => (p.soldOut || []).includes(c);
+const out = (p, c) => (p.soldOut || []).includes(c) || ((typeof SETTINGS !== "undefined" && SETTINGS.soldOutColors) || []).includes(c);
 const avail = p => p.colors.filter(c => !out(p, c));
 const swatches = p => p.colors.map(c => `<label class="${out(p, c) ? "out" : ""}"><input type="radio" name="color" value="${c}" onchange="cnote()" ${out(p, c) ? "disabled" : c === (avail(p).includes(p.defaultColor) ? p.defaultColor : avail(p)[0]) ? "checked" : ""}><span class="dot" style="background:${COLORS[c] || "#ccc"}"></span>${esc(c)}${out(p, c) ? " (sold out)" : ""}</label>`).join("");
 
@@ -170,6 +172,7 @@ function render() {
   nav(); window.scrollTo(0, 0);
   if ($("#chint")) cnote();
 }
+if (typeof SETTINGS !== "undefined" && SETTINGS.announcement && SETTINGS.announcement.on && SETTINGS.announcement.text) { $("#announce").textContent = SETTINGS.announcement.text; $("#announce").hidden = false; }
 $("#brand").textContent = SHOP.name;
 $("#foot").innerHTML = `${esc(SHOP.name)} · ${esc(SHOP.area)} · <a href="mailto:${esc(SHOP.contactEmail)}">${esc(SHOP.contactEmail)}</a> · <a href="mailto:${esc(SHOP.contactEmail)}?subject=Custom%20print%20request">Custom prints</a>`;
 addEventListener("hashchange", render);

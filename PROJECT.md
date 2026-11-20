@@ -71,6 +71,11 @@ Paste or upload this file at the start of a new chat so Claude can pick up where
 - Not tested against GitHub by Claude (no network access here). The owner's first real upload is the test. New photos take a minute or two to appear after GitHub rebuilds the site.
 - Files: `admin.html`, `photos.js` (new), `index.html` and `app.js` (updated to load photos.js).
 
+## Price/stock editor and announcement bar (decided, built)
+- `admin.html` now has three tabs: Photos, Prices & stock, Announcement. Prices & stock: edit any price, tick "Home" for home page products, mark sold-out colors per product, and mark colors out of stock everywhere. Announcement: turn a one-line top bar on/off and edit its text.
+- Saved in `settings.js` (`SETTINGS = { products: { id: { price, soldOut, featured } }, soldOutColors: [], announcement: { on, text } }`), which `app.js` merges over `products.js` (like `photos.js`). Only differences from `products.js` are stored. Cart items are re-priced to current prices on load, and items for removed products are dropped.
+- New files: `settings.js`; `index.html` loads it and has the `#announce` bar; `style.css` styles it. Don't re-upload an empty `settings.js` from a zip after using the admin page, or settings will be erased.
+
 ## Photos (decided)
 - Mix of approaches: print the first item of each kind, photograph it on the print bed with the owner's light, plus an in-hand shot for scale and an in-use shot.
 - Color rule (option C): main photo and in-hand photo use the same mid-tone color (blue or red work well; avoid black and white). The in-use photo can be any color.
