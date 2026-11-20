@@ -30,6 +30,10 @@ const SETTINGS = {
     "tow-truck": {
       "desc": "A detailed flatbed tow truck with a functional ramp on the back for driving other model cars (like the included Skoda 120 car) onto the flatbed. Load one up and haul it away. The ramp folds and the wheels rotate. The included small car has working wheels and lots of detail.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "cement-mixer": {
+      "desc": "A construction site workhorse. The barrel rotates by hand, and the chassis has working wheels, so you can roll it around the job site.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
