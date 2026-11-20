@@ -153,7 +153,7 @@ const SETTINGS = {
     ],
     [
       "Do I pay online?",
-      "No. Nothing is charged when you send a request. For meetups, you pay with cash, Venmo, or Zelle when you pick up. For shipped or delivered orders, we'll email you the total with cost and the payment info (Apple Pay, Venmo, or Zelle)."
+      "No. Nothing is charged when you send a request. For meetups, you pay with cash, Venmo, or Zelle when you pick up. For shipped or delivered orders, we'll email you the total with cost and the payment info (Apple Pay, Venmo, Zelle, or PayPal G&S)."
     ],
     [
       "Where do we meet if I choose local meetup?",
