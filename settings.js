@@ -86,6 +86,10 @@ const SETTINGS = {
     "lizard": {
       "desc": "An articulated lizard whose body, legs, and tail all move, so you can pose it however you like or let it climb your monitor.",
       "credit": "Design by Kris Cyber on Printables."
+    },
+    "orca": {
+      "desc": "An articulated orca whose jointed body flexes like it's swimming, tail included. Pose it or just fidget with it.",
+      "credit": "Design by Mattes on Printables."
     }
   }
 };
