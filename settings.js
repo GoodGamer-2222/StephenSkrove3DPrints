@@ -16,6 +16,12 @@ const SETTINGS = {
     },
     "mystery-desk-8": {
       "price": 50
+    },
+    "chicken": {
+      "featured": false
+    },
+    "thumb-drum": {
+      "featured": true
     }
   }
 };
