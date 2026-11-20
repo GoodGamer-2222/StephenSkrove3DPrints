@@ -144,7 +144,7 @@ const SETTINGS = {
       "Walmart Supercenter, 135 NE Terry Ln",
       "The White Owl, 119 SE 6th St"
     ],
-    "shipPayment": "Apple Pay, Venmo, or Zelle"
+    "shipPayment": "Apple Pay, Venmo, Zelle, or PayPal G&S"
   },
   "faq": [
     [
