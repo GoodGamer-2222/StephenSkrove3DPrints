@@ -90,6 +90,10 @@ const SETTINGS = {
     "orca": {
       "desc": "An articulated orca whose jointed body flexes like it's swimming, tail included. Pose it or just fidget with it.",
       "credit": "Design by Mattes on Printables."
+    },
+    "spider": {
+      "desc": "An articulated jumping spider with articulated legs and head. A small hook near the back lets you turn it into a keychain or hang it up. A fun fidget, desk buddy, or gentle scare for friends who don't like spiders.",
+      "credit": "Design by Daann_ii on Printables."
     }
   }
 };
