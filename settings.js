@@ -34,6 +34,10 @@ const SETTINGS = {
     "cement-mixer": {
       "desc": "A construction site workhorse. The barrel rotates by hand, and the chassis has working wheels, so you can roll it around the job site.",
       "credit": "Design by SHR3D.eu on Printables."
+    },
+    "backhoe": {
+      "desc": "A backhoe with a fully positionable rear digging arm and working wheels, ready for pretend digging on any job site.",
+      "credit": "Design by SHR3D.eu on Printables."
     }
   }
 };
