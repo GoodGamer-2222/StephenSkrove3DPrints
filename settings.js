@@ -6,7 +6,8 @@ const SETTINGS = {
   },
   "soldOutColors": [
     "Black / Blue Glitter",
-    "Gray"
+    "Gray",
+    "Silk Red"
   ],
   "products": {
     "gecko": {
