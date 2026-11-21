@@ -199,11 +199,12 @@ async function sendCustom(e) {
   b.disabled = true; b.textContent = "Sending...";
   try {
     const r = await fetch("https://formsubmit.co/ajax/" + SHOP.email, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(d) });
-    if (!r.ok) throw 0;
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || String(j.success) === "false") throw new Error(j.message || ("error " + r.status));
     location.hash = "/customsent";
   } catch (x) {
     b.disabled = false; b.textContent = "Send request";
-    $("#cerr").textContent = "That didn't send. Please try again, or email us directly at " + SHOP.contactEmail + ".";
+    $("#cerr").textContent = "That didn't send" + (x && x.message ? " (" + x.message + ")" : "") + ". Please try again, or email us directly at " + SHOP.contactEmail + ".";
   }
 }
 async function send(e) {
@@ -217,11 +218,12 @@ async function send(e) {
   try {
     const r = await fetch("https://formsubmit.co/ajax/" + SHOP.email, {
       method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(d) });
-    if (!r.ok) throw 0;
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || String(j.success) === "false") throw new Error(j.message || ("error " + r.status));
     last = { ship: d.fulfillment.startsWith("Ship") }; cart = []; save(); location.hash = "/thanks";
   } catch (x) {
     b.disabled = false; b.textContent = "Send order request";
-    $("#err").textContent = "That didn't send. Please try again, or email us directly at " + SHOP.contactEmail + ".";
+    $("#err").textContent = "That didn't send" + (x && x.message ? " (" + x.message + ")" : "") + ". Please try again, or email us directly at " + SHOP.contactEmail + ".";
   }
 }
 
