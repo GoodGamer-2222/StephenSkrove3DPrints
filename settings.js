@@ -191,6 +191,10 @@ const SETTINGS = {
     [
       "Can you make something custom?",
       "Maybe! Use the Custom prints link at the bottom of any page to tell us what you have in mind. We'll let you know if we can do it and what it would cost."
+    ],
+    [
+      "How big are the vehicles?",
+      "All vehicles are scaled to be about the same size as HotWheels. They are scaled to fit on the HotWheels tracks as well."
     ]
   ],
   "added": [
