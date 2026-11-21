@@ -85,3 +85,5 @@ nav a:hover{border-bottom-color:var(--acc)}
 .chip[aria-pressed=true]{background:var(--acc);color:#fff;border-color:var(--acc)}
 #list>p{grid-column:1/-1}
 #announce{background:var(--acc);color:#fff;text-align:center;padding:.6rem 1rem;font-weight:600}
+.card{position:relative}
+.tag{position:absolute;top:.6rem;left:.6rem;z-index:1;background:var(--acc);color:#fff;font-size:.75rem;font-weight:800;letter-spacing:.04em;padding:.2rem .6rem;border-radius:999px;text-transform:uppercase}

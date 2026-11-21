@@ -42,6 +42,8 @@ button.t.on{background:#0e6f62;color:#fff}
 <label for="dname">Name</label><input id="dname">
 <label for="ddesc">Description</label><textarea id="ddesc" rows="5"></textarea>
 <label for="dcredit">Designer credit</label><input id="dcredit" placeholder="e.g. Design by Name on Printables.">
+<label for="dlabel">Label (optional, like NEW or BEST SELLER)</label><input id="dlabel" list="lbls" maxlength="20" placeholder="e.g. NEW">
+<datalist id="lbls"><option value="NEW"><option value="BEST SELLER"><option value="LIMITED"><option value="BACK IN STOCK"><option value="SALE"></datalist>
 <p class="note">The credit shows as its own line under the description. You'll be asked to confirm before removing one.</p>
 <button id="dsave" type="button">Save wording for this product</button>
 </section>
@@ -67,6 +69,7 @@ button.t.on{background:#0e6f62;color:#fff}
 <div id="ncolsbox"><label>Colors it comes in</label><div id="ncols"></div></div>
 <label for="ndesc">Description</label><textarea id="ndesc" rows="4"></textarea>
 <label for="ncredit">Designer credit (leave blank if none is needed)</label><input id="ncredit" placeholder="e.g. Design by Name on Printables.">
+<label for="nlabel">Label (optional, like NEW or BEST SELLER)</label><input id="nlabel" list="lbls" maxlength="20" placeholder="e.g. NEW">
 <p class="note">On the shop, the credit appears right after the description, as part of the same paragraph.</p>
 <label for="nfiles">Photos (optional; the first becomes the main photo)</label><input id="nfiles" type="file" accept="image/*" multiple>
 <button id="nadd" type="button">Add product</button>
@@ -237,7 +240,7 @@ const shopCur = k => (settings.shop || {})[k] ?? SHOP[k];
 const faqCur = () => settings.faq ?? FAQ;
 const careCur = () => { const o = settings.care || {}; return { prints: o.prints ?? CARE.prints, items: CARE.items.map(i => ({ ...i, ...((o.items || {})[i.id] || {}) })) }; };
 let faqDraft = [];
-function drawWords() { const p = base($("#dprod").value); if (!p) return; const o = ov(p.id); $("#dname").value = o.name ?? p.name; $("#ddesc").value = o.desc ?? p.desc; $("#dcredit").value = o.credit ?? (p.credit || ""); }
+function drawWords() { const p = base($("#dprod").value); if (!p) return; const o = ov(p.id); $("#dname").value = o.name ?? p.name; $("#ddesc").value = o.desc ?? p.desc; $("#dcredit").value = o.credit ?? (p.credit || ""); $("#dlabel").value = o.label ?? (p.label || ""); }
 function drawFaq() { $("#faq").innerHTML = faqDraft.map(([q, a], i) => `<div class="row" style="align-items:flex-start;flex-wrap:wrap"><input data-i="${i}" data-k="0" value="${eh(q)}" aria-label="Question ${i + 1}"><textarea data-i="${i}" data-k="1" rows="3" aria-label="Answer ${i + 1}">${eh(a)}</textarea><button class="s" type="button" data-i="${i}">Remove</button></div>`).join(""); }
 function drawShop() {
   $("#smeet").value = shopCur("meetupSpots").join("\n"); $("#sreply").value = shopCur("replyTime"); $("#spay").value = shopCur("payment"); $("#sship").value = shopCur("shipPayment"); $("#sarea").value = shopCur("area");
@@ -250,7 +253,7 @@ $("#dsave").onclick = () => run("Saving wording", async () => {
   const p = base($("#dprod").value), name = $("#dname").value.trim(), desc = $("#ddesc").value.trim(), credit = $("#dcredit").value.trim();
   if (!name || !desc) throw new Error("The name and description can't be empty.");
   if (!credit && (ov(p.id).credit ?? p.credit) && !confirm("Remove the designer credit from " + p.name + "?")) throw new Error("Cancelled, so the credit was kept.");
-  setOv(p.id, "name", name, p.name); setOv(p.id, "desc", desc, p.desc); setOv(p.id, "credit", credit, p.credit || "");
+  setOv(p.id, "name", name, p.name); setOv(p.id, "desc", desc, p.desc); setOv(p.id, "credit", credit, p.credit || ""); setOv(p.id, "label", $("#dlabel").value.trim().slice(0, 20), p.label || "");
   await saveSettings("Update wording for " + p.id);
 }, $("#dsave"));
 $("#shsave").onclick = () => run("Saving shop details", async () => {
@@ -298,12 +301,12 @@ $("#nadd").onclick = () => run("Adding product", async () => {
   if (!mys && !colors.length) throw new Error("Tick at least one color.");
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "product";
   let id = slug, n = 2; while (PRODUCTS.some(p => p.id === id)) id = slug + "-" + n++;
-  const files = [...$("#nfiles").files];
-  settings.added = [...(settings.added || []), { id, name, price, cat, colors, desc, ...(credit ? { credit } : {}), ...(mys ? { mystery: true } : {}) }]; syncAdded();
+  const files = [...$("#nfiles").files], label = $("#nlabel").value.trim().slice(0, 20);
+  settings.added = [...(settings.added || []), { id, name, price, cat, colors, desc, ...(credit ? { credit } : {}), ...(label ? { label } : {}), ...(mys ? { mystery: true } : {}) }]; syncAdded();
   try { for (const f of files) { photos[id] = photos[id] || { images: [] }; photos[id].images.push(await putImage(id, await shrink(f))); } }
   finally { if (photos[id] && photos[id].images.length) await savePhotos("Add photos for " + id); }
   await saveSettings("Add product " + id);
-  ["#nname", "#nprice", "#ndesc", "#ncredit"].forEach(s => { $(s).value = ""; }); $("#nfiles").value = "";
+  ["#nname", "#nprice", "#ndesc", "#ncredit", "#nlabel"].forEach(s => { $(s).value = ""; }); $("#nfiles").value = "";
 }, $("#nadd"));
 $("#mlist").onclick = e => {
   const b = e.target.closest("button"); if (!b) return;

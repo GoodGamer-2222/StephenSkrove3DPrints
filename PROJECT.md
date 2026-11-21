@@ -89,6 +89,9 @@ Paste or upload this file at the start of a new chat so Claude can pick up where
 - Stored in `settings.js` (`shop`, `faq`, `care`, and per-product `name`/`desc`/`credit`), merged over `products.js` by `app.js`.
 - D built (Add & remove tab): add a product with name, price, category dropdown (mystery category = no colors), color checkboxes (the standard 12 + Colored pre-ticked), description, credit box, and optional photos (no icon; products without a photo show a colored square with initials). Added products live in `settings.added`; their photos go in `photos.js` like any product. Hide/Show works for every product (`settings.products[id].hidden`, removed from the shop but kept so it can return); Delete (with confirmation) works only for products added in admin. Original `products.js` products can be hidden, but deleting them needs a file edit by Claude.
 
+## Labels (NEW, BEST SELLER, etc.)
+- Each product can have one short label (up to 20 characters, free text with suggestions NEW, BEST SELLER, LIMITED, BACK IN STOCK, SALE). Set it in admin: Wording tab (any product) or the Add & remove form (new products), or `label: "NEW"` in `products.js`. Shown as a pill badge on the photo corner of product cards and above the title on the product page. Searching for the label text finds those products.
+
 ## Photos (decided)
 - Mix of approaches: print the first item of each kind, photograph it on the print bed with the owner's light, plus an in-hand shot for scale and an in-use shot.
 - Color rule (option C): main photo and in-hand photo use the same mid-tone color (blue or red work well; avoid black and white). The in-use photo can be any color.

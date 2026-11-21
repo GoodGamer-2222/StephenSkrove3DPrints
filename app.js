@@ -1,6 +1,6 @@
 if (typeof SETTINGS !== "undefined" && Array.isArray(SETTINGS.added)) SETTINGS.added.forEach(a => { if (!PRODUCTS.some(p => p.id === a.id)) PRODUCTS.push({ soldOut: [], tags: "", note: "", images: [], defaultColor: "", icon: "", ...a }); });
 if (typeof PHOTOS !== "undefined") PRODUCTS.forEach(p => { const x = PHOTOS[p.id]; if (x) { if (x.images && x.images.length) p.images = x.images; if (x.defaultColor) p.defaultColor = x.defaultColor; } });
-if (typeof SETTINGS !== "undefined") PRODUCTS.forEach(p => { const x = (SETTINGS.products || {})[p.id]; if (x) { if (typeof x.price === "number") p.price = x.price; if (Array.isArray(x.soldOut)) p.soldOut = x.soldOut; if (typeof x.featured === "boolean") p.featured = x.featured; ["name", "desc", "credit"].forEach(k => { if (typeof x[k] === "string") p[k] = x[k]; }); } });
+if (typeof SETTINGS !== "undefined") PRODUCTS.forEach(p => { const x = (SETTINGS.products || {})[p.id]; if (x) { if (typeof x.price === "number") p.price = x.price; if (Array.isArray(x.soldOut)) p.soldOut = x.soldOut; if (typeof x.featured === "boolean") p.featured = x.featured; ["name", "desc", "credit", "label"].forEach(k => { if (typeof x[k] === "string") p[k] = x[k]; }); } });
 if (typeof SETTINGS !== "undefined") for (let i = PRODUCTS.length - 1; i >= 0; i--) if (((SETTINGS.products || {})[PRODUCTS[i].id] || {}).hidden) PRODUCTS.splice(i, 1);
 if (typeof SETTINGS !== "undefined") {
   const S = SETTINGS;
@@ -35,7 +35,7 @@ const gallery = p => {
   return `<div><div class="pimg"><img id="mainimg" src="${a[0]}" alt="${esc(p.name)}"></div>` + (a.length > 1 ? `<div class="thumbs">${a.map((s, i) => `<button type="button" class="th ${i ? "" : "on"}" aria-label="Show photo ${i + 1}" onclick="showPic(this)"><img src="${s}" alt=""></button>`).join("")}</div>` : "") + `</div>`;
 };
 const showPic = b => { $("#mainimg").src = b.firstElementChild.src; document.querySelectorAll(".th").forEach(t => t.classList.toggle("on", t === b)); };
-const card = p => `<a class="card" href="#/product/${p.id}">${img(p)}<div class="t"><b>${esc(p.name)}</b><span class="price">${money(p.price)}</span></div></a>`;
+const card = p => `<a class="card" href="#/product/${p.id}">${p.label ? `<span class="tag">${esc(p.label)}</span>` : ""}${img(p)}<div class="t"><b>${esc(p.name)}</b><span class="price">${money(p.price)}</span></div></a>`;
 
 const out = (p, c) => (p.soldOut || []).includes(c) || ((typeof SETTINGS !== "undefined" && SETTINGS.soldOutColors) || []).includes(c);
 const avail = p => p.colors.filter(c => !out(p, c));
@@ -46,7 +46,7 @@ let sq = "", scat = "";
 const chips = () => ["", ...Object.keys(CATS)].map(k => `<button type="button" class="chip" aria-pressed="${scat === k}" onclick="setCat('${k}')">${k ? CATS[k].label : "All"}</button>`).join("");
 const list = () => {
   const w = sq.toLowerCase().split(/\s+/).filter(Boolean).map(x => x.length > 3 ? x.replace(/s$/, "") : x);
-  const r = PRODUCTS.filter(p => { const tk = `${p.name} ${p.tags || ""} ${CATS[p.cat].label} ${CATS[p.cat].words}`.toLowerCase().split(/\W+/); return (!scat || p.cat === scat) && w.every(x => tk.some(t => t.startsWith(x))); });
+  const r = PRODUCTS.filter(p => { const tk = `${p.name} ${p.label || ""} ${p.tags || ""} ${CATS[p.cat].label} ${CATS[p.cat].words}`.toLowerCase().split(/\W+/); return (!scat || p.cat === scat) && w.every(x => tk.some(t => t.startsWith(x))); });
   return r.length ? r.map(card).join("") : `<p>No matches. Try another word, or <a href="#/custom">ask about a custom print</a>.</p>`;
 };
 const setQ = v => { sq = v; $("#list").innerHTML = list(); };
@@ -78,7 +78,7 @@ const views = {
     return `<p><a href="#/shop">Back to shop</a></p>
     <div class="product">${gallery(p)}
       <form onsubmit="add(event,'${p.id}')">
-        <h1 style="font-size:2.2rem">${esc(p.name)}</h1>
+        ${p.label ? `<span class="tag" style="position:static;display:inline-block;margin-bottom:.4rem">${esc(p.label)}</span>` : ""}<h1 style="font-size:2.2rem">${esc(p.name)}</h1>
         <p class="price" style="font-size:1.4rem">${money(p.price)}</p>
         <p>${esc(p.desc)}${p.credit ? " " + esc(p.credit) : ""}</p>${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}${CARE.items.some(i => i.id === p.id) ? `<p><a href="#/care/${p.id}">How to use it</a></p>` : ""}
         ${p.note ? `<p class="note">${esc(p.note)}</p>` : ""}${p.mystery ? `<p class="note">Mystery box: the items and colors are a surprise, so you can't choose them.</p>` : `<b>Color</b>
