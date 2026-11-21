@@ -83,11 +83,11 @@ Paste or upload this file at the start of a new chat so Claude can pick up where
 - Links (decided, option B): footer links "Custom prints" and "Care & how-to"; the shop page custom note and the no-search-results message link to the custom page; FAQ custom answer points to the footer link. Not in the top menu.
 
 ## Editing more from admin.html (A and B decided and built; D pending)
-- Wording tab: edit a product's name, description, and designer credit. Credits were split out of descriptions into a separate `credit` field (shown as its own normal-size line under the description, not a tiny footer). Clearing a credit asks for confirmation.
+- Wording tab: edit a product's name, description, and designer credit. Credits were split out of descriptions into a separate `credit` field. On the shop the credit now reads as part of the same paragraph as the description (owner's request), not a tiny footer or a separate line. Clearing a credit asks for confirmation.
 - Shop & pages tab: meetup spots, reply time, meetup payment wording, shipped-order payment options, area; the FAQ (add/remove/edit; placeholders {contactEmail}, {payment}, {shipPayment}, {area} fill in automatically); the Care page tips and each how-to text and video path.
 - Email addresses (`email` FormSubmit alias and `contactEmail`) are NOT editable from admin, and `app.js` only accepts overrides for the five shop fields above even if `settings.js` is tampered with.
 - Stored in `settings.js` (`shop`, `faq`, `care`, and per-product `name`/`desc`/`credit`), merged over `products.js` by `app.js`.
-- D (add and remove products from admin, choosing photos instead of icons) was requested; the owner said it's fine to do after A and B. Design decisions still to propose: how a new product gets its picture (no icon), category and color choices, credit entry, and delete vs hide.
+- D built (Add & remove tab): add a product with name, price, category dropdown (mystery category = no colors), color checkboxes (the standard 12 + Colored pre-ticked), description, credit box, and optional photos (no icon; products without a photo show a colored square with initials). Added products live in `settings.added`; their photos go in `photos.js` like any product. Hide/Show works for every product (`settings.products[id].hidden`, removed from the shop but kept so it can return); Delete (with confirmation) works only for products added in admin. Original `products.js` products can be hidden, but deleting them needs a file edit by Claude.
 
 ## Photos (decided)
 - Mix of approaches: print the first item of each kind, photograph it on the print bed with the owner's light, plus an in-hand shot for scale and an in-use shot.

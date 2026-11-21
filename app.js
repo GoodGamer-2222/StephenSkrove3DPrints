@@ -1,5 +1,7 @@
+if (typeof SETTINGS !== "undefined" && Array.isArray(SETTINGS.added)) SETTINGS.added.forEach(a => { if (!PRODUCTS.some(p => p.id === a.id)) PRODUCTS.push({ soldOut: [], tags: "", note: "", images: [], defaultColor: "", icon: "", ...a }); });
 if (typeof PHOTOS !== "undefined") PRODUCTS.forEach(p => { const x = PHOTOS[p.id]; if (x) { if (x.images && x.images.length) p.images = x.images; if (x.defaultColor) p.defaultColor = x.defaultColor; } });
 if (typeof SETTINGS !== "undefined") PRODUCTS.forEach(p => { const x = (SETTINGS.products || {})[p.id]; if (x) { if (typeof x.price === "number") p.price = x.price; if (Array.isArray(x.soldOut)) p.soldOut = x.soldOut; if (typeof x.featured === "boolean") p.featured = x.featured; ["name", "desc", "credit"].forEach(k => { if (typeof x[k] === "string") p[k] = x[k]; }); } });
+if (typeof SETTINGS !== "undefined") for (let i = PRODUCTS.length - 1; i >= 0; i--) if (((SETTINGS.products || {})[PRODUCTS[i].id] || {}).hidden) PRODUCTS.splice(i, 1);
 if (typeof SETTINGS !== "undefined") {
   const S = SETTINGS;
   ["meetupSpots", "replyTime", "payment", "shipPayment", "area"].forEach(k => { if (S.shop && S.shop[k] !== undefined) SHOP[k] = S.shop[k]; });  // emails can't be overridden
@@ -78,7 +80,7 @@ const views = {
       <form onsubmit="add(event,'${p.id}')">
         <h1 style="font-size:2.2rem">${esc(p.name)}</h1>
         <p class="price" style="font-size:1.4rem">${money(p.price)}</p>
-        <p>${esc(p.desc)}</p>${p.credit ? `<p>${esc(p.credit)}</p>` : ""}${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}${CARE.items.some(i => i.id === p.id) ? `<p><a href="#/care/${p.id}">How to use it</a></p>` : ""}
+        <p>${esc(p.desc)}${p.credit ? " " + esc(p.credit) : ""}</p>${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}${CARE.items.some(i => i.id === p.id) ? `<p><a href="#/care/${p.id}">How to use it</a></p>` : ""}
         ${p.note ? `<p class="note">${esc(p.note)}</p>` : ""}${p.mystery ? `<p class="note">Mystery box: the items and colors are a surprise, so you can't choose them.</p>` : `<b>Color</b>
         <div class="sw">${swatches(p)}</div><small style="display:block;margin:-.5rem 0 1.2rem;color:var(--mute)">Colors vary slightly from spool to spool.</small><div id="chint" class="note" hidden>Colored means this one is hand-colored to look realistic.<label for="want" style="display:block;font-weight:600;margin:.6rem 0 .25rem">Want a main color? (optional)</label><input id="want" name="want" maxlength="40" placeholder="e.g. pink" autocomplete="off"><small style="display:block;margin-top:.3rem">We'll confirm if we can match it.</small></div>`}
         <b><label for="q">Quantity</label></b><br>
