@@ -187,5 +187,29 @@ const SETTINGS = {
       "Can you make something custom?",
       "Maybe! Use the Custom prints link at the bottom of any page to tell us what you have in mind. We'll let you know if we can do it and what it would cost."
     ]
+  ],
+  "added": [
+    {
+      "id": "simple-excavator",
+      "name": "Simple Excavator",
+      "price": 10,
+      "cat": "vehicles",
+      "colors": [
+        "Green",
+        "Gray",
+        "White",
+        "Yellow",
+        "Red",
+        "Blue",
+        "Purple",
+        "Silk Gold",
+        "Silk Red",
+        "Black / Blue Glitter",
+        "Black / Gold Glitter",
+        "Colored"
+      ],
+      "desc": "This construction vehicle is full of moving parts! The wheels turn, the cab rotates, and the arm has three rotation points.",
+      "credit": "Design by WhopperPrinting on Printables."
+    }
   ]
 };
