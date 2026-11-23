@@ -10,10 +10,6 @@ const SETTINGS = {
     "Silk Red"
   ],
   "products": {
-    "gecko": {
-      "desc": "A little gecko with multiple interlocking tail segments that wiggle organically. The main body is not articulated, so all the wiggle comes from the tail.",
-      "credit": "Design by Timmy on Printables."
-    },
     "mystery-desk-4": {
       "price": 35
     },
@@ -140,6 +136,9 @@ const SETTINGS = {
     },
     "simple-excavator": {
       "label": "NEW"
+    },
+    "gecko": {
+      "label": "NEW LOW PRICE"
     }
   },
   "shop": {
