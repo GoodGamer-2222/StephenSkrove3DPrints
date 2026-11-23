@@ -105,5 +105,11 @@ const PHOTOS = {
       "images/dump-truck-9.jpg"
     ],
     "defaultColor": "Yellow"
+  },
+  "car": {
+    "images": [
+      "images/car-1.jpg"
+    ],
+    "defaultColor": "Blue"
   }
 };
