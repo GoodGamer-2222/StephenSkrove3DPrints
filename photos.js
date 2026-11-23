@@ -86,5 +86,10 @@ const PHOTOS = {
       "images/tanker-semi-12.jpg",
       "images/tanker-semi-13.jpg"
     ]
+  },
+  "dump-truck": {
+    "images": [
+      "images/dump-truck-1.jpg"
+    ]
   }
 };
