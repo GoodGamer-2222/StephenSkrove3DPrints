@@ -11,7 +11,6 @@ const SETTINGS = {
   ],
   "products": {
     "gecko": {
-      "price": 12,
       "desc": "A little gecko with multiple interlocking tail segments that wiggle organically. The main body is not articulated, so all the wiggle comes from the tail.",
       "credit": "Design by Timmy on Printables."
     },
@@ -27,7 +26,6 @@ const SETTINGS = {
       "credit": "Design by Buchtomil on Printables."
     },
     "thumb-drum": {
-      "featured": true,
       "desc": "A pocket-sized hand percussion tool that makes distinct hollow tones when you play it. Includes two attached spring-style thumb drumsticks. To play, hold the finger notches between your index and middle fingers and flick the drumstick lever with your thumbnail.",
       "credit": "Design by LoboCNC on Printables."
     },
@@ -49,7 +47,8 @@ const SETTINGS = {
     },
     "tanker-semi": {
       "desc": "A long-haul liquid transporter: a cab pulling a cylindrical tank on a flatbed trailer. The trailer is detachable and comes with 4 spare wheels, and the model's wheels work.",
-      "credit": "Design by SHR3D.eu on Printables."
+      "credit": "Design by SHR3D.eu on Printables.",
+      "featured": true
     },
     "container-semi": {
       "desc": "A heavy freight cab connected to a detachable shipping container trailer. The container (a hollow rectangular crate) comes on and off the trailer easily, so you can fill it with your own mini cargo.",
