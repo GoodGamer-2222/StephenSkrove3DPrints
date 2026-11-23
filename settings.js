@@ -2,7 +2,7 @@
 const SETTINGS = {
   "announcement": {
     "on": true,
-    "text": "Holiday Pricing!!! 20% off every single order! Discount will be calculated and sent by email after you submit your order."
+    "text": "Form submitting not working currently. If you want something, please email me directly. Sorry for the inconvenience. I am fixing it."
   },
   "soldOutColors": [
     "Black / Blue Glitter",
