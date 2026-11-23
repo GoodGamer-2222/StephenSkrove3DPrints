@@ -90,6 +90,7 @@ const PHOTOS = {
   "dump-truck": {
     "images": [
       "images/dump-truck-1.jpg"
-    ]
+    ],
+    "defaultColor": "Yellow"
   }
 };
