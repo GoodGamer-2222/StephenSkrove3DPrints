@@ -1,4 +1,4 @@
-// Photo lists, managed by admin.html. Please don't edit by hand.
+// Managed by admin.html. Please don't edit by hand.
 const PHOTOS = {
   "garbage-truck": {
     "defaultColor": "Gray",
@@ -53,5 +53,8 @@ const PHOTOS = {
       "images/chicken-3.jpg"
     ],
     "defaultColor": "Gray"
+  },
+  "backhoe": {
+    "defaultColor": "Red"
   }
 };
