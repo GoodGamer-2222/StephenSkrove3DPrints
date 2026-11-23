@@ -57,7 +57,16 @@ const PHOTOS = {
   "backhoe": {
     "defaultColor": "Red",
     "images": [
-      "images/backhoe-1.jpg"
+      "images/backhoe-1.jpg",
+      "images/backhoe-2.jpg",
+      "images/backhoe-3.jpg",
+      "images/backhoe-4.jpg",
+      "images/backhoe-5.jpg",
+      "images/backhoe-6.jpg",
+      "images/backhoe-7.jpg",
+      "images/backhoe-8.jpg",
+      "images/backhoe-9.jpg",
+      "images/backhoe-10.jpg"
     ]
   }
 };
