@@ -89,7 +89,15 @@ const PHOTOS = {
   },
   "dump-truck": {
     "images": [
-      "images/dump-truck-1.jpg"
+      "images/dump-truck-1.jpg",
+      "images/dump-truck-2.jpg",
+      "images/dump-truck-3.jpg",
+      "images/dump-truck-4.jpg",
+      "images/dump-truck-5.jpg",
+      "images/dump-truck-6.jpg",
+      "images/dump-truck-7.jpg",
+      "images/dump-truck-8.jpg",
+      "images/dump-truck-9.jpg"
     ],
     "defaultColor": "Yellow"
   }
