@@ -68,5 +68,8 @@ const PHOTOS = {
       "images/backhoe-9.jpg",
       "images/backhoe-10.jpg"
     ]
+  },
+  "tanker-semi": {
+    "defaultColor": "Yellow"
   }
 };
