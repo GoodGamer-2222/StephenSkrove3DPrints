@@ -194,7 +194,7 @@ const SETTINGS = {
     ],
     [
       "How big are the vehicles?",
-      "All vehicles are scaled to be about the same size as HotWheels. They are scaled to fit on the HotWheels tracks as well. If you don't know how big that is, that means they are around 25-30 mm wide (length and height vary)."
+      "All vehicles are scaled to be about the same size as HotWheels unless otherwise specified. They are scaled to fit on the HotWheels tracks as well. If you don't know how big that is, that means they are around 25-30 mm wide (length and height vary)."
     ]
   ],
   "added": [
