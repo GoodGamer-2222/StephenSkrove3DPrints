@@ -5,7 +5,7 @@ const PHOTOS = {
     "images": []
   },
   "bobcat": {
-    "defaultColor": "Gray",
+    "defaultColor": "Yellow",
     "images": [
       "images/bobcat-1.jpg",
       "images/bobcat-2.jpg",
