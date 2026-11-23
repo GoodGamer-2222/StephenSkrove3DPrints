@@ -7,7 +7,6 @@ const PHOTOS = {
   "bobcat": {
     "defaultColor": "Yellow",
     "images": [
-      "images/bobcat-1.jpg",
       "images/bobcat-2.jpg",
       "images/bobcat-3.jpg",
       "images/bobcat-4.jpg"
