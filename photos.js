@@ -55,6 +55,9 @@ const PHOTOS = {
     "defaultColor": "Gray"
   },
   "backhoe": {
-    "defaultColor": "Red"
+    "defaultColor": "Red",
+    "images": [
+      "images/backhoe-1.jpg"
+    ]
   }
 };
