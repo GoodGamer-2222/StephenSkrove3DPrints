@@ -70,6 +70,9 @@ const PHOTOS = {
     ]
   },
   "tanker-semi": {
-    "defaultColor": "Yellow"
+    "defaultColor": "Yellow",
+    "images": [
+      "images/tanker-semi-1.jpg"
+    ]
   }
 };
