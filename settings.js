@@ -193,6 +193,10 @@ const SETTINGS = {
     [
       "How big are the vehicles?",
       "All vehicles are scaled to be about the same size as HotWheels unless otherwise specified. They are scaled to fit on the HotWheels tracks as well. If you don't know how big that is, that means they are around 25-30 mm wide (length and height vary)."
+    ],
+    [
+      "What else do you do?",
+      "I do lots of other stuff, including airsoft (you can check out my HopUp profile at https://www.hopupairsoft.com/p/tuEiJJIl8EYELp51XivbIOen6oj1), fishkeeping/breeding (email me to see what I have available), and I keep ducks and have a hamster."
     ]
   ],
   "added": [
