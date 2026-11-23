@@ -6,9 +6,7 @@ const PHOTOS = {
   },
   "bobcat": {
     "defaultColor": "Yellow",
-    "images": [
-      "images/bobcat-4.jpg"
-    ]
+    "images": []
   },
   "fidget": {
     "defaultColor": "Gray",
