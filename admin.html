@@ -19,7 +19,7 @@ button.t.on{background:#0e6f62;color:#fff}
 <div id="tokbox"><label for="tok">GitHub token</label><input id="tok" type="password" autocomplete="off">
 <button id="savetok" type="button">Save token on this device</button></div>
 <div id="app" hidden>
-<div class="tabs"><button class="t on" data-t="photos" type="button">Photos</button><button class="t" data-t="prices" type="button">Prices &amp; stock</button><button class="t" data-t="words" type="button">Wording</button><button class="t" data-t="shop" type="button">Shop &amp; pages</button><button class="t" data-t="manage" type="button">Add &amp; remove</button><button class="t" data-t="bar" type="button">Announcement</button></div>
+<div class="tabs"><button class="t on" data-t="photos" type="button">Photos</button><button class="t" data-t="prices" type="button">Prices &amp; stock</button><button class="t" data-t="words" type="button">Wording</button><button class="t" data-t="shop" type="button">Shop &amp; pages</button><button class="t" data-t="sizes" type="button">Size &amp; weight</button><button class="t" data-t="manage" type="button">Add &amp; remove</button><button class="t" data-t="bar" type="button">Announcement</button></div>
 <section id="photos">
 <label for="prod">Product (each photo below can be changed)</label><select id="prod"></select>
 <label for="files">Photos (choose as many as you like; the first one for a product becomes its main photo if it has none)</label><input id="files" type="file" accept="image/*" multiple>
@@ -60,6 +60,17 @@ button.t.on{background:#0e6f62;color:#fff}
 <h2>Care page</h2>
 <label for="cprints">Looking after prints (one tip per line)</label><textarea id="cprints" rows="6"></textarea>
 <div id="citems"></div><button id="csave" type="button">Save care page</button>
+</section>
+<section id="sizes" hidden>
+<h2>Size, weight, and what's included</h2>
+<p class="note">Type weights in grams and sizes in millimeters (length, width, height). The shop shows inches and ounces too. Weights stay private unless you tick the box below. They're added up in your order emails.</p>
+<select id="zprod" aria-label="Product"></select>
+<h3>Parts</h3><div id="zparts"></div><button class="s" id="zadd" type="button">Add a part</button>
+<label for="zinc">What's included</label><input id="zinc" placeholder="e.g. 1 tow truck and 1 Skoda 120 car">
+<button id="zsave" type="button">Save size and weight for this product</button>
+<h3>Show weights to customers?</h3>
+<label class="chk"><input id="zshow" type="checkbox"> Show weights on the shop</label><br>
+<button id="zshowsave" type="button">Save this setting</button>
 </section>
 <section id="manage" hidden>
 <h2>Add a product</h2>
@@ -161,7 +172,7 @@ function drawStock() {
 }
 function drawGlobal() { $("#gcols").innerHTML = Object.keys(COLORS).map(c => chk(c, (settings.soldOutColors || []).includes(c))).join(""); }
 function drawBar() { const a = settings.announcement || {}; $("#aon").checked = !!a.on; $("#atext").value = a.text || ""; }
-function redraw() { fillSelects(); drawManage(); drawPhotos(); drawPrices(); drawStock(); drawGlobal(); drawBar(); drawQueue(); drawWords(); drawShop(); }
+function redraw() { fillSelects(); drawManage(); drawSizes(); drawPhotos(); drawPrices(); drawStock(); drawGlobal(); drawBar(); drawQueue(); drawWords(); drawShop(); }
 
 async function run(label, fn, btn) {
   if (btn) btn.disabled = true;
@@ -178,7 +189,7 @@ async function start() {
 }
 $("#savetok").onclick = () => { try { localStorage.setItem("ghtok", $("#tok").value.trim()); } catch (e) {} $("#tok").value = ""; start(); };
 $("#forget").onclick = () => { try { localStorage.removeItem("ghtok"); } catch (e) {} location.reload(); };
-$(".tabs").onclick = e => { const b = e.target.closest("button"); if (!b) return; ["photos", "prices", "words", "shop", "manage", "bar"].forEach(id => { $("#" + id).hidden = id !== b.dataset.t; }); document.querySelectorAll(".t").forEach(x => x.classList.toggle("on", x === b)); };
+$(".tabs").onclick = e => { const b = e.target.closest("button"); if (!b) return; ["photos", "prices", "words", "shop", "sizes", "manage", "bar"].forEach(id => { $("#" + id).hidden = id !== b.dataset.t; }); document.querySelectorAll(".t").forEach(x => x.classList.toggle("on", x === b)); };
 
 // photos
 $("#prod").onchange = () => { drawPhotos(); queue.forEach(r => { if (!r.manual) r.id = $("#prod").value; }); drawQueue(); };
@@ -280,10 +291,40 @@ $("#csave").onclick = () => run("Saving care page", async () => {
   await saveSettings("Update care page");
 }, $("#csave"));
 
+// size, weight, included
+let zdraft = [];
+function drawZ() {
+  const f = (i, k, v, ph, num) => `<input ${num ? 'type="number" min="0" step="any"' : ""} data-i="${i}" data-k="${k}" value="${eh(v)}" placeholder="${ph}" aria-label="${ph}">`;
+  $("#zparts").innerHTML = zdraft.map((r, i) => `<div class="row" style="flex-wrap:wrap">${f(i, "name", r.name, "Part name").replace("<input", '<input style="flex:1 1 100%"')}${f(i, "g", r.g, "grams", 1)}${f(i, "l", r.l, "length mm", 1)}${f(i, "w", r.w, "width mm", 1)}${f(i, "h", r.h, "height mm", 1)}<button class="s" type="button" data-i="${i}">Remove</button></div>`).join("") || "<p>No parts yet.</p>";
+}
+function drawSizes() {
+  const p = base($("#zprod").value); if (!p) return;
+  zdraft = (ov(p.id).parts ?? p.parts ?? []).map(x => ({ name: x.name, g: x.grams ?? "", l: (x.mm || [])[0] ?? "", w: (x.mm || [])[1] ?? "", h: (x.mm || [])[2] ?? "" }));
+  $("#zinc").value = ov(p.id).included ?? p.included ?? ""; $("#zshow").checked = !!settings.showWeights; drawZ();
+}
+$("#zprod").onchange = drawSizes;
+$("#zparts").oninput = e => { const d = e.target.dataset; if (d && d.k) zdraft[+d.i][d.k] = e.target.value; };
+$("#zparts").onclick = e => { const b = e.target.closest("button"); if (!b) return; zdraft.splice(+b.dataset.i, 1); drawZ(); };
+$("#zadd").onclick = () => { zdraft.push({ name: "", g: "", l: "", w: "", h: "" }); drawZ(); };
+$("#zsave").onclick = () => run("Saving size and weight", async () => {
+  const p = base($("#zprod").value), num = v => (v === "" || v === undefined || v === null) ? null : +v;
+  const parts = zdraft.map(r => {
+    if (!String(r.name).trim()) throw new Error("Every part needs a name.");
+    const g = num(r.g), d = [num(r.l), num(r.w), num(r.h)], o = { name: String(r.name).trim() };
+    if ([g, ...d].some(v => v !== null && !(v >= 0))) throw new Error("Please use plain numbers (no units) in the weight and size boxes.");
+    if (g !== null) o.grams = g;
+    if (d.every(v => v !== null)) o.mm = d; else if (d.some(v => v !== null)) throw new Error("For " + o.name + ", fill in all three sizes or leave them all blank.");
+    return o;
+  });
+  setOv(p.id, "parts", parts, p.parts || []); setOv(p.id, "included", $("#zinc").value.trim(), p.included || "");
+  await saveSettings("Update size and weight for " + p.id);
+}, $("#zsave"));
+$("#zshowsave").onclick = () => run("Saving", async () => { if ($("#zshow").checked) settings.showWeights = true; else delete settings.showWeights; await saveSettings("Update show weights setting"); }, $("#zshowsave"));
+
 // adding, hiding, and deleting products
 function fillSelects() {
   const opts = list => list.map(p => `<option value="${p.id}">${eh(p.name)}</option>`).join("");
-  [["#prod", PRODUCTS], ["#sprod", PRODUCTS.filter(p => !p.mystery)], ["#dprod", PRODUCTS]].forEach(([id, list]) => { const keep = $(id).value; $(id).innerHTML = opts(list); if (keep && list.some(p => p.id === keep)) $(id).value = keep; });
+  [["#prod", PRODUCTS], ["#sprod", PRODUCTS.filter(p => !p.mystery)], ["#dprod", PRODUCTS], ["#zprod", PRODUCTS]].forEach(([id, list]) => { const keep = $(id).value; $(id).innerHTML = opts(list); if (keep && list.some(p => p.id === keep)) $(id).value = keep; });
   if (!$("#ncat").innerHTML) $("#ncat").innerHTML = Object.keys(CATS).map(k => `<option value="${k}">${CATS[k].label}</option>`).join("");
   if (!$("#ncols").innerHTML) $("#ncols").innerHTML = Object.keys(COLORS).map(c => `<label class="chk"><input type="checkbox" data-c="${c}" ${ncolSel.has(c) ? "checked" : ""}> ${c}</label>`).join("");
 }

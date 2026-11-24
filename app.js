@@ -1,6 +1,6 @@
 if (typeof SETTINGS !== "undefined" && Array.isArray(SETTINGS.added)) SETTINGS.added.forEach(a => { if (!PRODUCTS.some(p => p.id === a.id)) PRODUCTS.push({ soldOut: [], tags: "", note: "", images: [], defaultColor: "", icon: "", ...a }); });
 if (typeof PHOTOS !== "undefined") PRODUCTS.forEach(p => { const x = PHOTOS[p.id]; if (x) { if (x.images && x.images.length) p.images = x.images; if (x.defaultColor) p.defaultColor = x.defaultColor; } });
-if (typeof SETTINGS !== "undefined") PRODUCTS.forEach(p => { const x = (SETTINGS.products || {})[p.id]; if (x) { if (typeof x.price === "number") p.price = x.price; if (Array.isArray(x.soldOut)) p.soldOut = x.soldOut; if (typeof x.featured === "boolean") p.featured = x.featured; ["name", "desc", "credit", "label"].forEach(k => { if (typeof x[k] === "string") p[k] = x[k]; }); } });
+if (typeof SETTINGS !== "undefined") PRODUCTS.forEach(p => { const x = (SETTINGS.products || {})[p.id]; if (x) { if (typeof x.price === "number") p.price = x.price; if (Array.isArray(x.soldOut)) p.soldOut = x.soldOut; if (typeof x.featured === "boolean") p.featured = x.featured; if (Array.isArray(x.parts)) p.parts = x.parts; if (typeof x.included === "string") p.included = x.included; ["name", "desc", "credit", "label"].forEach(k => { if (typeof x[k] === "string") p[k] = x[k]; }); } });
 if (typeof SETTINGS !== "undefined") for (let i = PRODUCTS.length - 1; i >= 0; i--) if (((SETTINGS.products || {})[PRODUCTS[i].id] || {}).hidden) PRODUCTS.splice(i, 1);
 if (typeof SETTINGS !== "undefined") {
   const S = SETTINGS;
@@ -52,6 +52,16 @@ const list = () => {
 const setQ = v => { sq = v; $("#list").innerHTML = list(); };
 const setCat = k => { scat = k; $(".chips").innerHTML = chips(); $("#list").innerHTML = list(); };
 const fill = t => String(t).replace(/\{(\w+)\}/g, (m, k) => typeof SHOP[k] === "string" ? SHOP[k] : m);
+const mm2in = v => (v / 25.4).toFixed(1), g2oz = g => (g / 28.3495).toFixed(1);
+const specs = p => {
+  const parts = p.parts || [], showW = typeof SETTINGS !== "undefined" && SETTINGS.showWeights;
+  if (!parts.length && !p.included) return "";
+  const size = x => x.mm && x.mm.length === 3 ? `${x.mm.join(" × ")} mm (${x.mm.map(mm2in).join(" × ")} in)` : "";
+  const wt = x => showW && x.grams ? `${x.grams} g (${g2oz(x.grams)} oz)` : "";
+  const rows = parts.map(x => `<tr><td>${esc(x.name)}</td><td>${size(x)}</td>${showW ? `<td>${wt(x)}</td>` : ""}</tr>`).join("");
+  const total = showW && parts.length > 1 ? parts.reduce((t, x) => t + (+x.grams || 0), 0) : 0;
+  return `<div class="specs">${p.included ? `<p><b>Included:</b> ${esc(p.included)}</p>` : ""}${rows ? `<div style="overflow-x:auto"><table><tr><th>Part</th><th>Size</th>${showW ? "<th>Weight</th>" : ""}</tr>${rows}</table></div>` : ""}${total ? `<p><b>Total weight:</b> ${total} g (${g2oz(total)} oz)</p>` : ""}</div>`;
+};
 const views = {
   home: () => `
     <section class="hero sm">
@@ -80,7 +90,7 @@ const views = {
       <form onsubmit="add(event,'${p.id}')">
         ${p.label ? `<span class="tag" style="position:static;display:inline-block;margin-bottom:.4rem">${esc(p.label)}</span>` : ""}<h1 style="font-size:2.2rem">${esc(p.name)}</h1>
         <p class="price" style="font-size:1.4rem">${money(p.price)}</p>
-        <p>${esc(p.desc)}${p.credit ? " " + esc(p.credit) : ""}</p>${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}${CARE.items.some(i => i.id === p.id) ? `<p><a href="#/care/${p.id}">How to use it</a></p>` : ""}
+        <p>${esc(p.desc)}${p.credit ? " " + esc(p.credit) : ""}</p>${p.details ? `<p style="color:var(--mute)">${esc(p.details)}</p>` : ""}${CARE.items.some(i => i.id === p.id) ? `<p><a href="#/care/${p.id}">How to use it</a></p>` : ""}${specs(p)}
         ${p.note ? `<p class="note">${esc(p.note)}</p>` : ""}${p.mystery ? `<p class="note">Mystery box: the items and colors are a surprise, so you can't choose them.</p>` : `<b>Color</b>
         <div class="sw">${swatches(p)}</div><small style="display:block;margin:-.5rem 0 1.2rem;color:var(--mute)">Colors vary slightly from spool to spool.</small><div id="chint" class="note" hidden>Colored means this one is hand-colored to look realistic.<label for="want" style="display:block;font-weight:600;margin:.6rem 0 .25rem">Want a main color? (optional)</label><input id="want" name="want" maxlength="40" placeholder="e.g. pink" autocomplete="off"><small style="display:block;margin-top:.3rem">We'll confirm if we can match it.</small></div>`}
         <b><label for="q">Quantity</label></b><br>
@@ -212,6 +222,9 @@ async function send(e) {
   const f = e.target, b = f.querySelector(".btn"), d = Object.fromEntries(new FormData(f));
   d.items = cart.map(c => `${c.q} x ${c.name} (${c.color}${c.want ? ", main color: " + c.want : ""}) - ${money(c.price * c.q)}`).join("\n");
   d.total = money(total());
+  const wt = c => { const p = PRODUCTS.find(x => x.id === c.id); return ((p && p.parts) || []).reduce((t, x) => t + (+x.grams || 0), 0) * c.q; };
+  const kg = cart.filter(c => wt(c) > 0), tg = kg.reduce((t, c) => t + wt(c), 0);
+  if (tg) d.total_weight = `${Math.round(tg)} g (${g2oz(tg)} oz)` + (kg.length < cart.length ? " (some items have no weight entered)" : "");
   d._subject = "New order request from " + d.name;
   d._template = "table"; d._captcha = "false";
   b.disabled = true; b.textContent = "Sending...";

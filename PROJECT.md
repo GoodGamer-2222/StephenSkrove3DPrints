@@ -95,6 +95,9 @@ Paste or upload this file at the start of a new chat so Claude can pick up where
 ## Form sending check (fix)
 - Owner reported order and custom print requests not working. Claude can't test FormSubmit from here. Found that the forms only checked the HTTP status, but FormSubmit can reply OK with `success: "false"` (for example when the alias needs activation), which would show the thank-you page without sending any email. Both forms now read FormSubmit's reply, stay on the form on failure, and show FormSubmit's message in the error line. Next step is the owner's report of what message appears, and checking the inbox/spam for a FormSubmit activation email.
 
+## Size, weight, and included (decided: option C, built)
+- Per product: a parts list (name, weight in grams, length/width/height in mm) and an "included" line, e.g. Flatbed Tow Truck With Car: tow truck + Skoda 120 car parts, "1 tow truck and 1 Skoda 120 car". Entered in admin's Size & weight tab (stored in `settings.js` as `parts` and `included`, or `parts`/`included` in `products.js`). The product page shows an "Included" line and a parts table with sizes in mm and inches. Weights are PRIVATE by default: the order email gets `total_weight` (parts summed times quantity, flagged if some items have no weight). A shop-wide admin switch (`showWeights`) shows weights, per-part and total, in grams and ounces. No sample numbers were entered; the owner fills them in.
+
 ## Photos (decided)
 - Mix of approaches: print the first item of each kind, photograph it on the print bed with the owner's light, plus an in-hand shot for scale and an in-use shot.
 - Color rule (option C): main photo and in-hand photo use the same mid-tone color (blue or red work well; avoid black and white). The in-use photo can be any color.

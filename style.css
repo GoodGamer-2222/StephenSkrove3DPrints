@@ -87,3 +87,6 @@ nav a:hover{border-bottom-color:var(--acc)}
 #announce{background:var(--acc);color:#fff;text-align:center;padding:.6rem 1rem;font-weight:600}
 .card{position:relative}
 .tag{position:absolute;top:.6rem;left:.6rem;z-index:1;background:var(--acc);color:#fff;font-size:.75rem;font-weight:800;letter-spacing:.04em;padding:.2rem .6rem;border-radius:999px;text-transform:uppercase}
+.specs{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;margin:1rem 0}
+.specs p{margin:.2rem 0 .6rem}.specs table{border-collapse:collapse;width:100%}
+.specs th,.specs td{text-align:left;padding:.3rem .5rem;border-bottom:1px solid var(--line)}
