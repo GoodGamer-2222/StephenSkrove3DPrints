@@ -11,10 +11,10 @@ const SETTINGS = {
   ],
   "products": {
     "mystery-desk-4": {
-      "price": 20
+      "price": 15
     },
     "mystery-desk-8": {
-      "price": 35
+      "price": 25
     },
     "chicken": {
       "featured": false,
@@ -171,16 +171,16 @@ const SETTINGS = {
       "price": 3
     },
     "mystery-cars-4": {
-      "price": 12
+      "price": 10
     },
     "mystery-cars-8": {
-      "price": 22
+      "price": 18
     },
     "mystery-articulated-4": {
-      "price": 15
+      "price": 12
     },
     "mystery-articulated-8": {
-      "price": 28
+      "price": 20
     }
   },
   "shop": {
