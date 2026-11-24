@@ -202,6 +202,7 @@ const qty = (i, d) => { cart[i].q += d; if (cart[i].q < 1) cart.splice(i, 1); sa
 const rm = i => { cart.splice(i, 1); save(); render(); };
 const nav = () => $("#cartlink").innerHTML = `Request list <span class="badge${count() ? "" : " zero"}">${count()}</span>`;
 
+const mailLink = (subject, d) => { const body = Object.entries(d).filter(([k]) => !k.startsWith("_")).map(([k, v]) => `${k}: ${v}`).join("\n").slice(0, 1500); return `<a href="mailto:${esc(SHOP.contactEmail)}?subject=${encodeURIComponent(subject)}&amp;body=${encodeURIComponent(body)}">Or click here to email this request to us.</a>`; };
 async function sendCustom(e) {
   e.preventDefault();
   const f = e.target, b = f.querySelector(".btn"), d = Object.fromEntries(new FormData(f));
@@ -214,7 +215,7 @@ async function sendCustom(e) {
     location.hash = "/customsent";
   } catch (x) {
     b.disabled = false; b.textContent = "Send request";
-    $("#cerr").textContent = "That didn't send" + (x && x.message ? " (" + x.message + ")" : "") + ". Please try again, or email us directly at " + SHOP.contactEmail + ".";
+    $("#cerr").innerHTML = esc("That didn't send" + (x && x.message ? " (" + x.message + ")" : "") + ". Please try again, or email us directly at " + SHOP.contactEmail + ".") + " " + mailLink("Custom print request", d);
   }
 }
 async function send(e) {
@@ -236,7 +237,7 @@ async function send(e) {
     last = { ship: d.fulfillment.startsWith("Ship") }; cart = []; save(); location.hash = "/thanks";
   } catch (x) {
     b.disabled = false; b.textContent = "Send order request";
-    $("#err").textContent = "That didn't send" + (x && x.message ? " (" + x.message + ")" : "") + ". Please try again, or email us directly at " + SHOP.contactEmail + ".";
+    $("#err").innerHTML = esc("That didn't send" + (x && x.message ? " (" + x.message + ")" : "") + ". Please try again, or email us directly at " + SHOP.contactEmail + ".") + " " + mailLink("Order request", d);
   }
 }
 
